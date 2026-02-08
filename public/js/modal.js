@@ -70,7 +70,7 @@ function buildEventModalContent(event) {
       ${organizerHtml}
       <div class="meta-block">
         <strong>🏢 Industry</strong>
-        <p style="color:${getIndustryColor(event.industry)};font-weight:600;">${escapeHtml(event.industry || 'General')}</p>
+        <p style="color:${getIndustryColor(event.industry)};font-weight:600;">${escapeHtml(event.industry || 'Other')}</p>
       </div>
     </div>
     ${descriptionHtml}

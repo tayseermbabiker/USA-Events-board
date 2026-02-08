@@ -51,7 +51,7 @@ exports.handler = async (event) => {
           venue_address: evt.venue_address,
           city: evt.city || null,
           organizer: evt.organizer,
-          industry: evt.industry || 'General',
+          industry: evt.industry || null,
           is_free: evt.is_free || false,
           registration_url: evt.registration_url,
           image_url: evt.image_url,

@@ -101,7 +101,6 @@ function getIndustryColor(industry) {
     'Marketing': '#B45309',
     'Healthcare': '#0E7490',
     'Legal': '#475569',
-    'General': '#64748B',
   };
   return colors[industry] || '#64748B';
 }

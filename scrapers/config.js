@@ -68,6 +68,5 @@ module.exports = {
     'Marketing',
     'Healthcare',
     'Legal',
-    'General',
   ],
 };

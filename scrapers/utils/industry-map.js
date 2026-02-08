@@ -12,7 +12,7 @@ const KEYWORDS = {
  * Classify text into an industry based on keyword matching.
  * Returns the best match or the provided default.
  */
-function classifyIndustry(text, defaultIndustry = 'General') {
+function classifyIndustry(text, defaultIndustry = null) {
   if (!text) return defaultIndustry;
   const lower = ` ${text.toLowerCase()} `;
 

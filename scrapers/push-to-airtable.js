@@ -32,7 +32,7 @@ async function pushEvents(events) {
         venue_address: evt.venue_address || null,
         city: evt.city || null,
         organizer: evt.organizer || null,
-        industry: evt.industry || 'General',
+        industry: evt.industry || null,
         is_free: evt.is_free || false,
         registration_url: evt.registration_url || null,
         image_url: evt.image_url || null,

@@ -64,7 +64,11 @@ class BaseScraper {
 
     const normalizedCity = config.cityAliases?.[evt.city] || evt.city;
     const city = config.validCities.includes(normalizedCity) ? normalizedCity : null;
-    const industry = config.validIndustries.includes(evt.industry) ? evt.industry : 'General';
+    const industry = config.validIndustries.includes(evt.industry) ? evt.industry : null;
+    if (!industry) {
+      logger.warn(this.name, `Skipping unclassified event: ${evt.title}`);
+      return null;
+    }
 
     return {
       title: evt.title.trim().substring(0, 500),
