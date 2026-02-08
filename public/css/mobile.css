@@ -64,6 +64,28 @@ body {
   align-items: center;
   gap: var(--space-sm);
 }
+.btn-create {
+  background: transparent;
+  color: var(--white);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-md);
+  font-size: var(--font-small);
+  font-weight: 600;
+  min-height: var(--touch-target);
+  transition: all var(--transition-base);
+  border: 1.5px solid rgba(212,168,83,0.6);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+.btn-create:hover {
+  background: rgba(212,168,83,0.15);
+  border-color: var(--accent-gold);
+}
+.btn-create:active {
+  transform: scale(0.95);
+}
 .btn-login {
   background: transparent;
   color: var(--accent-gold);

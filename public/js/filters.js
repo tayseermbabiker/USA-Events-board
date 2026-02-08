@@ -1,7 +1,7 @@
 // Filters Logic
 
 let allEvents = [];
-let activeFilters = { month: '', industries: [], cost: '', cities: [], source: '' };
+let activeFilters = { month: '', industries: [], cost: '', cities: [] };
 
 function initializeFilters() {
   // Month filter
@@ -20,12 +20,6 @@ function initializeFilters() {
   const costFilter = document.getElementById('filter-cost');
   if (costFilter) {
     costFilter.addEventListener('change', (e) => { activeFilters.cost = e.target.value; applyFilters(); });
-  }
-
-  // Source filter
-  const sourceFilter = document.getElementById('filter-source');
-  if (sourceFilter) {
-    sourceFilter.addEventListener('change', (e) => { activeFilters.source = e.target.value; applyFilters(); });
   }
 
   // Multi-selects
@@ -88,18 +82,14 @@ function applyFilters() {
   if (activeFilters.cities.length > 0) {
     filtered = filtered.filter(e => activeFilters.cities.includes(e.city));
   }
-  if (activeFilters.source) {
-    filtered = filtered.filter(e => e.source === activeFilters.source);
-  }
-
   renderEventCards(filtered);
   updateClearButtonVisibility();
 }
 
 function clearFilters() {
-  activeFilters = { month: '', industries: [], cost: '', cities: [], source: '' };
+  activeFilters = { month: '', industries: [], cost: '', cities: [] };
 
-  ['filter-month', 'filter-cost', 'filter-source'].forEach(id => {
+  ['filter-month', 'filter-cost'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.value = '';
   });
@@ -118,7 +108,7 @@ function clearFilters() {
 function updateClearButtonVisibility() {
   const btn = document.getElementById('clear-filters');
   if (!btn) return;
-  const active = activeFilters.month || activeFilters.industries.length > 0 || activeFilters.cost || activeFilters.cities.length > 0 || activeFilters.source;
+  const active = activeFilters.month || activeFilters.industries.length > 0 || activeFilters.cost || activeFilters.cities.length > 0;
   btn.style.display = active ? 'inline-block' : 'none';
 }
 
