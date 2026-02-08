@@ -51,7 +51,7 @@ function buildEventModalContent(event) {
 
   return `
     ${imageHtml}
-    <h2 style="margin-bottom:var(--space-md);color:var(--navy-dark);">${escapeHtml(event.title)}</h2>
+    <h2 style="margin-bottom:var(--space-md);color:var(--navy-dark);font-family:var(--font-serif);font-weight:400;">${escapeHtml(event.title)}</h2>
     <p class="modal-subtitle">
       ${event.is_free ? '<strong style="color:var(--success);">FREE EVENT</strong>' : '<strong style="color:var(--gold);">PAID EVENT</strong>'}
       ${event.source ? `&nbsp;&middot;&nbsp;<span style="color:var(--grey-dark);">via ${escapeHtml(event.source)}</span>` : ''}

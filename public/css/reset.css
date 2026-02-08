@@ -9,6 +9,6 @@ button { cursor: pointer; border: none; background: none; }
 a { text-decoration: none; color: inherit; }
 ul, ol { list-style: none; }
 button:focus-visible, input:focus-visible, select:focus-visible {
-  outline: 2px solid var(--primary-purple);
+  outline: 2px solid var(--primary-teal);
   outline-offset: 2px;
 }

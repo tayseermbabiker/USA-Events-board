@@ -25,25 +25,25 @@
   .container { max-width: var(--container-max); }
   .events-grid { grid-template-columns: repeat(3, 1fr); }
   .event-card:hover {
-    transform: translateY(-8px) scale(1.01);
-    box-shadow: 0 20px 40px rgba(139,92,246,0.2), 0 8px 16px rgba(59,130,246,0.15);
+    transform: translateY(-6px);
+    box-shadow: 0 20px 40px rgba(11,20,38,0.15), 0 8px 16px rgba(30,58,95,0.1);
   }
   .btn-primary:hover {
-    background: linear-gradient(135deg, #A78BFA 0%, #60A5FA 100%);
+    background: var(--charcoal);
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(139,92,246,0.45);
+    box-shadow: 0 8px 25px rgba(30,58,95,0.35);
   }
   .filter-chip:hover {
-    border-color: #8B5CF6;
+    border-color: var(--primary-teal);
     background: rgba(255,255,255,1);
-    box-shadow: 0 4px 12px rgba(139,92,246,0.2);
+    box-shadow: 0 4px 12px rgba(45,212,191,0.15);
     transform: translateY(-2px);
   }
   .btn-login:hover {
-    background: linear-gradient(135deg, #A78BFA 0%, #60A5FA 100%);
+    background: rgba(212,168,83,0.15);
     transform: translateY(-2px);
   }
-  .btn-text:hover { color: #8B5CF6; }
+  .btn-text:hover { color: var(--teal-dark); }
   .modal-sheet { max-width: 800px; }
 }
 @media (min-width: 1440px) {

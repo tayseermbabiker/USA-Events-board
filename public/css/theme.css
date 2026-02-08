@@ -1,12 +1,14 @@
 :root {
-  --navy-dark: #0f0a1e;
-  --navy-medium: #1a1530;
-  --primary-purple: #8B5CF6;
-  --primary-blue: #3B82F6;
-  --electric-blue: #0EA5E9;
-  --purple-glow: #A855F7;
-  --deep-purple: #7C3AED;
-  --gold: #FFB800;
+  --navy-dark: #0B1426;
+  --navy-medium: #1C2333;
+  --charcoal: #2D3748;
+  --primary-teal: #2DD4BF;
+  --primary-navy: #1E3A5F;
+  --accent-gold: #D4A853;
+  --gold-light: #E8C87A;
+  --teal-dark: #1A9E8F;
+  --teal-glow: #5EEAD4;
+  --gold: #D4A853;
   --beige: #EFE6DE;
   --grey-light: #F8FAFC;
   --grey-medium: #E2E8F0;
@@ -18,6 +20,8 @@
   --text-primary: #1E2A38;
   --text-secondary: #4A4A4A;
   --text-light: #FFFFFF;
+  --font-serif: 'DM Serif Display', Georgia, serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', sans-serif;
   --font-base: 16px;
   --font-small: 14px;
   --font-large: 18px;
@@ -43,5 +47,5 @@
   --container-max: 1400px;
 }
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', sans-serif;
+  font-family: var(--font-sans);
 }

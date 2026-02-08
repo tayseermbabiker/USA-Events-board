@@ -20,12 +20,12 @@ function truncateText(text, maxLength) {
 
 function getRandomGradient() {
   const gradients = [
-    'linear-gradient(135deg, #8B5CF6 0%, #3B82F6 100%)',
-    'linear-gradient(135deg, #1E2A38 0%, #0EA5E9 100%)',
-    'linear-gradient(135deg, #7C3AED 0%, #EC4899 100%)',
-    'linear-gradient(135deg, #059669 0%, #0EA5E9 100%)',
-    'linear-gradient(135deg, #D97706 0%, #DC2626 100%)',
-    'linear-gradient(135deg, #2563EB 0%, #7C3AED 100%)',
+    'linear-gradient(135deg, #0B1426 0%, #1E3A5F 100%)',
+    'linear-gradient(135deg, #1C2333 0%, #2DD4BF 100%)',
+    'linear-gradient(135deg, #2D3748 0%, #D4A853 100%)',
+    'linear-gradient(135deg, #1E3A5F 0%, #1A9E8F 100%)',
+    'linear-gradient(135deg, #0B1426 0%, #D4A853 100%)',
+    'linear-gradient(135deg, #2D3748 0%, #5EEAD4 100%)',
   ];
   return gradients[Math.floor(Math.random() * gradients.length)];
 }
@@ -94,13 +94,13 @@ function getNext6Months() {
 // Industry color map for badges
 function getIndustryColor(industry) {
   const colors = {
-    'Technology': '#3B82F6',
-    'AI': '#8B5CF6',
-    'Startup': '#10B981',
-    'Finance': '#059669',
-    'Marketing': '#F59E0B',
-    'Healthcare': '#EF4444',
-    'Legal': '#6366F1',
+    'Technology': '#1E3A5F',
+    'AI': '#2DD4BF',
+    'Startup': '#0D9488',
+    'Finance': '#D4A853',
+    'Marketing': '#B45309',
+    'Healthcare': '#0E7490',
+    'Legal': '#475569',
     'General': '#64748B',
   };
   return colors[industry] || '#64748B';
