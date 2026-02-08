@@ -2,7 +2,7 @@
 
 ## 1. Overview
 
-Conferix USA is a web platform that aggregates professional events across major US tech/business hubs. It helps professionals discover networking events, conferences, meetups, and workshops in the Technology, AI, Startup, Finance, and Marketing industries.
+Conferix USA is a web platform that aggregates professional events across major US tech/business hubs. It helps professionals discover networking events, conferences, meetups, and workshops in Technology, AI, Startup, Finance, Marketing, Healthcare, and Legal industries. A key feature is email notifications by profession — busy professionals (especially doctors and lawyers) receive curated event digests rather than having to search manually.
 
 This is a sister project to Conferix UAE, sharing the same architecture but targeting the US market.
 
@@ -17,6 +17,8 @@ Professionals in the US tech/business ecosystem waste time checking multiple eve
 - **Startup founders & VCs** looking for pitch events, demo days, and networking
 - **Finance/Fintech professionals** seeking industry conferences and meetups
 - **Marketing professionals** looking for growth, SEO, and brand events
+- **Healthcare professionals** (physicians, nurses, pharmacists) seeking CME/CE conferences and medical seminars
+- **Legal professionals** (attorneys, paralegals) seeking CLE events, legal tech conferences, and bar events
 
 ## 4. Target Cities
 

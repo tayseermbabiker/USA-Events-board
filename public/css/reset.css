@@ -1,0 +1,14 @@
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; padding: 0; }
+html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; scroll-behavior: smooth; }
+body { line-height: 1.5; -webkit-text-size-adjust: 100%; min-height: 100vh; }
+img, picture, video, canvas, svg { display: block; max-width: 100%; }
+input, button, textarea, select { font: inherit; }
+p, h1, h2, h3, h4, h5, h6 { overflow-wrap: break-word; }
+button { cursor: pointer; border: none; background: none; }
+a { text-decoration: none; color: inherit; }
+ul, ol { list-style: none; }
+button:focus-visible, input:focus-visible, select:focus-visible {
+  outline: 2px solid var(--primary-purple);
+  outline-offset: 2px;
+}

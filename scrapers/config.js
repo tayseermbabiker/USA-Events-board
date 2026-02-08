@@ -1,4 +1,9 @@
 module.exports = {
+  airtable: {
+    baseId: 'appKiSt45AcFjSNw4',
+    tableName: 'Events',
+  },
+
   webhookUrl: process.env.WEBHOOK_URL || 'https://YOUR-USA-SITE.netlify.app/.netlify/functions/receive-events',
 
   browser: {

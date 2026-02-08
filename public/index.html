@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Discover US professional events, conferences, and networking opportunities across Austin, San Francisco, and New York.">
+    <meta name="theme-color" content="#8B5CF6">
+    <title>Conferix USA | Professional Events, Conferences & Networking</title>
+
+    <meta name="keywords" content="USA events, Austin conferences, San Francisco networking, New York professional events, tech events, healthcare conferences, legal events, medical CME">
+    <meta name="author" content="Conferix">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Conferix USA | Professional Events, Conferences & Networking">
+    <meta property="og:description" content="Discover US professional events, conferences, and networking across Austin, SF, and NYC.">
+
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/theme.css">
+    <link rel="stylesheet" href="/css/mobile.css">
+    <link rel="stylesheet" href="/css/desktop.css">
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <h1>Conferix <span class="logo-region">USA</span></h1>
+                    <p class="tagline">Professional Events, Curated</p>
+                </div>
+                <div class="header-actions">
+                    <button id="login-btn" class="btn-login">Login</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Filters Section -->
+    <section class="filters-section" id="filters">
+        <div class="container">
+            <div class="filter-chips">
+
+                <!-- Month Filter -->
+                <select id="filter-month" class="filter-chip" aria-label="Filter by month">
+                    <option value="">All Months</option>
+                </select>
+
+                <!-- Industry Multi-select -->
+                <div class="multi-select" id="industry-select">
+                    <button type="button" class="filter-chip multi-select-btn" id="industry-btn">
+                        All Industries ▾
+                    </button>
+                    <div class="multi-select-dropdown" id="industry-dropdown">
+                        <label><input type="checkbox" value="Technology"> Technology</label>
+                        <label><input type="checkbox" value="AI"> AI</label>
+                        <label><input type="checkbox" value="Startup"> Startup</label>
+                        <label><input type="checkbox" value="Finance"> Finance</label>
+                        <label><input type="checkbox" value="Marketing"> Marketing</label>
+                        <label><input type="checkbox" value="Healthcare"> Healthcare</label>
+                        <label><input type="checkbox" value="Legal"> Legal</label>
+                        <label><input type="checkbox" value="General"> General</label>
+                    </div>
+                </div>
+
+                <!-- Cost Filter -->
+                <select id="filter-cost" class="filter-chip" aria-label="Filter by cost">
+                    <option value="">All Costs</option>
+                    <option value="free">Free</option>
+                    <option value="paid">Paid</option>
+                </select>
+
+                <!-- City Multi-select -->
+                <div class="multi-select" id="city-select">
+                    <button type="button" class="filter-chip multi-select-btn" id="city-btn">
+                        All Cities ▾
+                    </button>
+                    <div class="multi-select-dropdown" id="city-dropdown">
+                        <label><input type="checkbox" value="Austin"> Austin</label>
+                        <label><input type="checkbox" value="San Francisco"> San Francisco</label>
+                        <label><input type="checkbox" value="New York"> New York</label>
+                        <label><input type="checkbox" value="Washington DC"> Washington DC</label>
+                        <label><input type="checkbox" value="Miami"> Miami</label>
+                        <label><input type="checkbox" value="Chicago"> Chicago</label>
+                        <label><input type="checkbox" value="Los Angeles"> Los Angeles</label>
+                        <label><input type="checkbox" value="Seattle"> Seattle</label>
+                        <label><input type="checkbox" value="Denver"> Denver</label>
+                        <label><input type="checkbox" value="Boston"> Boston</label>
+                    </div>
+                </div>
+
+                <!-- Source Filter -->
+                <select id="filter-source" class="filter-chip" aria-label="Filter by source">
+                    <option value="">All Sources</option>
+                    <option value="Eventbrite">Eventbrite</option>
+                    <option value="Meetup">Meetup</option>
+                    <option value="Luma">Luma</option>
+                    <option value="eMedEvents">eMedEvents</option>
+                    <option value="Pri-Med">Pri-Med</option>
+                    <option value="AMS">AMS</option>
+                    <option value="Clio">Clio</option>
+                    <option value="USChamber">US Chamber</option>
+                </select>
+
+                <button id="clear-filters" class="btn-text" style="display:none;">Clear All</button>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Events Container -->
+    <main class="events-container">
+        <div class="container">
+
+            <!-- Stats Bar -->
+            <div class="stats-bar" id="stats-bar">
+                <span id="event-count">Loading events...</span>
+            </div>
+
+            <!-- Loading State -->
+            <div id="loading" class="loading">
+                <div class="loading-spinner"></div>
+                <p>Loading professional events...</p>
+            </div>
+
+            <!-- Events Grid -->
+            <div id="events-grid" class="events-grid"></div>
+
+            <!-- Empty State -->
+            <div id="empty-state" class="empty-state" style="display: none;">
+                <div class="empty-icon">📅</div>
+                <h3>No events found</h3>
+                <p>Try adjusting your filters or check back later for new events.</p>
+                <button id="reset-filters" class="btn-primary" style="max-width:300px;margin:0 auto;">Show All Events</button>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Newsletter Section -->
+    <section class="newsletter-section" id="newsletter">
+        <div class="container">
+            <div class="newsletter-box">
+                <h2>Never Miss a Professional Event</h2>
+                <p>Get curated US events in your inbox every Monday. Select your profession:</p>
+
+                <form id="newsletter-form" class="newsletter-form">
+                    <div class="newsletter-interests">
+                        <label class="interest-chip">
+                            <input type="checkbox" name="interests" value="technology">
+                            <span>Technology</span>
+                        </label>
+                        <label class="interest-chip">
+                            <input type="checkbox" name="interests" value="ai">
+                            <span>AI</span>
+                        </label>
+                        <label class="interest-chip">
+                            <input type="checkbox" name="interests" value="startup">
+                            <span>Startup</span>
+                        </label>
+                        <label class="interest-chip">
+                            <input type="checkbox" name="interests" value="finance">
+                            <span>Finance</span>
+                        </label>
+                        <label class="interest-chip">
+                            <input type="checkbox" name="interests" value="marketing">
+                            <span>Marketing</span>
+                        </label>
+                        <label class="interest-chip">
+                            <input type="checkbox" name="interests" value="healthcare">
+                            <span>Healthcare</span>
+                        </label>
+                        <label class="interest-chip">
+                            <input type="checkbox" name="interests" value="legal">
+                            <span>Legal</span>
+                        </label>
+                        <label class="interest-chip featured">
+                            <input type="checkbox" name="interests" value="all" checked>
+                            <span>All Industries</span>
+                        </label>
+                    </div>
+
+                    <div class="newsletter-input-group">
+                        <input type="email" id="newsletter-email" name="email" placeholder="your@email.com" required class="newsletter-input" aria-label="Email address">
+                        <button type="submit" class="newsletter-btn">Subscribe</button>
+                    </div>
+                </form>
+
+                <p id="newsletter-message" class="newsletter-message"></p>
+                <p class="newsletter-note">Join professionals across the US. Unsubscribe anytime.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2026 Conferix USA. All rights reserved.</p>
+                <p class="footer-note">Curated weekly for US business professionals</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Event Detail Modal -->
+    <div class="event-modal" id="event-modal">
+        <div class="modal-overlay" onclick="closeEventModal()"></div>
+        <div class="modal-sheet" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeEventModal()" aria-label="Close modal">&times;</button>
+            <div class="modal-body" id="modal-body"></div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="login-modal" id="login-modal" style="display: none;">
+        <div class="modal-overlay" onclick="closeLoginModal()"></div>
+        <div class="modal-sheet modal-small" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeLoginModal()" aria-label="Close">&times;</button>
+            <div class="modal-body">
+                <h2>Quick Login</h2>
+                <p class="modal-subtitle">Save events and get personalized recommendations</p>
+                <form id="login-form" onsubmit="handleLoginSubmit(event)">
+                    <input type="text" id="login-name" name="first_name" placeholder="Your name" required class="input-field">
+                    <input type="email" id="login-email" name="email" placeholder="Your email address" required class="input-field">
+                    <button type="submit" class="btn-primary btn-full">Continue</button>
+                    <button type="button" id="skip-login" class="btn-text btn-full" onclick="closeLoginModal()">Skip - Continue Browsing</button>
+                </form>
+                <p id="login-message" class="message"></p>
+                <p class="privacy-note">No spam. Unsubscribe anytime.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/utils.js"></script>
+    <script src="/js/eventCards.js"></script>
+    <script src="/js/filters.js"></script>
+    <script src="/js/modal.js"></script>
+    <script src="/js/app.js"></script>
+
+</body>
+</html>

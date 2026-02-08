@@ -1,0 +1,27 @@
+
+TLDR: Here is your direct "Scrape List" for building the US version of Conferix. I have categorized them by volume (Big Aggregators) and value (Professional/B2B) so you can prioritize your data sourcing.
+
+1. The "Big Three" (Mass Volume Aggregators)
+
+https://www.eventbrite.com/d/united-states/business--events/?page=1
+https://luma.com/austin
+https://luma.com/sf
+https://luma.com/miami
+https://luma.com/nyc
+https://www.emedevents.com/
+https://www.pri-med.com/?refurl=gemini.google.com   this one has 3 categories where i gues pagination is needed to explore them they categories are like a dropdown list 
+https://www.americanmedicalseminars.com/seminar-calendar/  this is also similar to pri=med. pagination is needed 
+https://www.clio.com/events/
+https://www.event.law.com/legalweek/2026-agenda
+
+2.Tech & Startup Specific (The "Conferix" Core)
+https://www.uschamber.com/events
+https://www.allconferencealert.com/
+
+
+
+
+
+
+https://www.startupgrind.tech/?utm_source=website&utm_medium=navigation&__hstc=139794924.7840a2b72df45e05937a756a9c7da8a2.1770475880169.1770475880169.1770475880169.1&__hssc=139794924.1.1770475880170&__hsfp=a2c3aa5d3c213fa9ed1d13d143af15d5&_ga=2.12479284.1084578392.1770475873-308910353.1770475873&_gl=1*b0rmog*_gcl_au*NzAyNzgzOTI4LjE3NzA0NzU4NzU.
+
