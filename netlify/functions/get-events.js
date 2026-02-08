@@ -42,7 +42,10 @@ exports.handler = async (event) => {
     const records = await base('Events')
       .select({
         filterByFormula: filterFormula,
-        sort: [{ field: 'start_date', direction: 'asc' }],
+        sort: [
+          { field: 'is_user_submitted', direction: 'desc' },
+          { field: 'start_date', direction: 'asc' },
+        ],
         maxRecords: 200,
       })
       .all();
@@ -62,6 +65,7 @@ exports.handler = async (event) => {
       registration_url: r.get('registration_url'),
       image_url: r.get('image_url'),
       source: r.get('source'),
+      is_user_submitted: r.get('is_user_submitted') || false,
     }));
 
     return {
