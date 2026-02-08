@@ -7,6 +7,7 @@ const CITY_PAGES = [
   { city: 'Austin',        url: 'https://luma.com/austin?k=p' },
   { city: 'San Francisco', url: 'https://luma.com/sf?k=p' },
   { city: 'New York',      url: 'https://luma.com/nyc?k=p' },
+  { city: 'Miami',         url: 'https://luma.com/miami?k=p' },
 ];
 
 class LumaScraper extends BaseScraper {

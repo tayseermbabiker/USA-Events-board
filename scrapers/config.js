@@ -26,7 +26,9 @@ module.exports = {
     ams:           { enabled: true },
     clio:          { enabled: true },
     startupgrind:  { enabled: true },
-    uschamber:     { enabled: true },
+    uschamber:          { enabled: true },
+    allconferencealert: { enabled: true },
+    legalweek:          { enabled: true },
   },
 
   // Target cities
@@ -34,18 +36,23 @@ module.exports = {
     'Austin',
     'San Francisco',
     'New York',
+    'Miami',
   ],
+
+  // Normalize borough/suburb names to their metro area
+  cityAliases: {
+    'Brooklyn': 'New York',
+    'Manhattan': 'New York',
+    'Oakland': 'San Francisco',
+    'San Jose': 'San Francisco',
+  },
 
   validCities: [
     'Austin',
     'San Francisco',
-    'San Jose',
-    'Oakland',
     'New York',
-    'Brooklyn',
-    'Manhattan',
-    'Los Angeles',
     'Miami',
+    'Los Angeles',
     'Chicago',
     'Seattle',
     'Denver',

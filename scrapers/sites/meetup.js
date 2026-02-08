@@ -10,6 +10,7 @@ const CITY_SEARCHES = [
   { city: 'Austin',        url: 'https://www.meetup.com/find/?location=us--tx--austin&source=EVENTS&categoryId=546' },
   { city: 'San Francisco', url: 'https://www.meetup.com/find/?location=us--ca--san-francisco&source=EVENTS&categoryId=546' },
   { city: 'New York',      url: 'https://www.meetup.com/find/?location=us--ny--new-york&source=EVENTS&categoryId=546' },
+  { city: 'Miami',         url: 'https://www.meetup.com/find/?location=us--fl--miami&source=EVENTS&categoryId=546' },
 ];
 
 class MeetupScraper extends BaseScraper {

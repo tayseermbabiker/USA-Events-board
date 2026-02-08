@@ -62,7 +62,8 @@ class BaseScraper {
       return null;
     }
 
-    const city = config.validCities.includes(evt.city) ? evt.city : null;
+    const normalizedCity = config.cityAliases?.[evt.city] || evt.city;
+    const city = config.validCities.includes(normalizedCity) ? normalizedCity : null;
     const industry = config.validIndustries.includes(evt.industry) ? evt.industry : 'General';
 
     return {
