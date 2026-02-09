@@ -142,7 +142,7 @@ const handler = async () => {
       if (!email) continue;
 
       await resend.emails.send({
-        from: 'Conferix USA <alerts@conferix.com>',
+        from: 'Conferix USA <onboarding@resend.dev>',
         to: email,
         subject: `${matching.length} New Event${matching.length > 1 ? 's' : ''} This Week — Conferix USA`,
         html: buildEmailHtml(sub, matching),
