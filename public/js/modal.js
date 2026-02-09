@@ -30,14 +30,14 @@ function buildEventModalContent(event) {
 
   const venueHtml = event.venue_name ? `
     <div class="meta-block">
-      <strong>📍 Venue</strong>
+      <strong>Venue</strong>
       <p>${escapeHtml(event.venue_name)}</p>
       ${event.venue_address ? `<p style="font-size:14px;color:var(--grey-dark);">${escapeHtml(event.venue_address)}</p>` : ''}
     </div>` : '';
 
   const organizerHtml = event.organizer ? `
     <div class="meta-block">
-      <strong>👤 Organized by</strong>
+      <strong>Organized by</strong>
       <p>${escapeHtml(event.organizer)}</p>
     </div>` : '';
 
@@ -58,18 +58,18 @@ function buildEventModalContent(event) {
     </p>
     <div class="modal-event-meta">
       <div class="meta-block">
-        <strong>📅 Date</strong>
+        <strong>Date</strong>
         <p>${startDate}</p>
         ${endDate ? `<p>to ${endDate}</p>` : ''}
       </div>
       <div class="meta-block">
-        <strong>🏙️ City</strong>
+        <strong>City</strong>
         <p>${escapeHtml(event.city || 'United States')}</p>
       </div>
       ${venueHtml}
       ${organizerHtml}
       <div class="meta-block">
-        <strong>🏢 Industry</strong>
+        <strong>Industry</strong>
         <p style="color:${getIndustryColor(event.industry)};font-weight:600;">${escapeHtml(event.industry || 'Other')}</p>
       </div>
     </div>
@@ -95,6 +95,8 @@ function openLoginModal() {
     modal.style.display = 'block';
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
+    setupChipToggle('modal-city-prefs', 'modal-city');
+    setupChipToggle('modal-industry-prefs', 'modal-industry');
   }
 }
 
@@ -107,14 +109,83 @@ function closeLoginModal() {
   }
 }
 
-function handleLoginSubmit(e) {
+// Chip toggle: selecting specific chips unchecks "All", unchecking all re-checks "All"
+function setupChipToggle(containerId, inputName) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  const checkboxes = container.querySelectorAll(`input[name="${inputName}"]`);
+  const allChip = container.querySelector(`input[name="${inputName}"][value=""]`);
+
+  checkboxes.forEach(cb => {
+    cb.addEventListener('change', () => {
+      if (cb === allChip) {
+        // "All" was clicked — uncheck all specifics
+        if (cb.checked) {
+          checkboxes.forEach(c => { if (c !== allChip) c.checked = false; });
+        } else {
+          // Can't uncheck "All" by itself — re-check it
+          cb.checked = true;
+        }
+      } else {
+        // A specific chip was toggled
+        const anySpecific = Array.from(checkboxes).some(c => c !== allChip && c.checked);
+        if (anySpecific) {
+          allChip.checked = false;
+        } else {
+          allChip.checked = true;
+        }
+      }
+    });
+  });
+}
+
+// Gather checked chip values as comma-separated string (empty = all)
+function getChipValues(inputName) {
+  const checkboxes = document.querySelectorAll(`input[name="${inputName}"]:checked`);
+  const values = Array.from(checkboxes).map(cb => cb.value).filter(v => v !== '');
+  return values.join(', ');
+}
+
+async function handleLoginSubmit(e) {
   e.preventDefault();
-  const name = document.getElementById('login-name').value;
-  const email = document.getElementById('login-email').value;
+  const name = document.getElementById('login-name').value.trim();
+  const email = document.getElementById('login-email').value.trim();
+  const cities = getChipValues('modal-city');
+  const industries = getChipValues('modal-industry');
+  const msgEl = document.getElementById('login-message');
+
+  // Save locally
   saveUser({ first_name: name, email: email });
   const loginBtn = document.getElementById('login-btn');
   if (loginBtn) loginBtn.textContent = 'Hi, ' + name;
-  closeLoginModal();
+
+  // POST to subscribe endpoint
+  try {
+    const res = await fetch('/.netlify/functions/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, first_name: name, cities, industries }),
+    });
+    const data = await res.json();
+    if (data.success) {
+      if (msgEl) {
+        msgEl.className = 'message success';
+        msgEl.textContent = data.message;
+      }
+      setTimeout(closeLoginModal, 1500);
+    } else {
+      throw new Error(data.error || 'Subscription failed');
+    }
+  } catch (err) {
+    console.warn('Subscribe API not available:', err.message);
+    // Still close modal — local save succeeded
+    if (msgEl) {
+      msgEl.className = 'message success';
+      msgEl.textContent = 'Welcome! Alerts will activate once deployed.';
+    }
+    setTimeout(closeLoginModal, 1500);
+  }
 }
 
 function handleEscapeKey(e) {

@@ -139,57 +139,53 @@
         </div>
     </main>
 
-    <!-- Newsletter Section -->
+    <!-- Newsletter / Alert Sign-Up Section -->
     <section class="newsletter-section" id="newsletter">
         <div class="container">
             <div class="newsletter-box">
-                <h2>Never Miss a Professional Event</h2>
-                <p>Get curated US events in your inbox every Monday. Select your profession:</p>
+                <h2>Get Personalized Event Alerts</h2>
+                <p>Choose your cities and industries. We'll email you new events every Monday.</p>
 
                 <form id="newsletter-form" class="newsletter-form">
-                    <div class="newsletter-interests">
-                        <label class="interest-chip">
-                            <input type="checkbox" name="interests" value="technology">
-                            <span>Technology</span>
-                        </label>
-                        <label class="interest-chip">
-                            <input type="checkbox" name="interests" value="ai">
-                            <span>AI</span>
-                        </label>
-                        <label class="interest-chip">
-                            <input type="checkbox" name="interests" value="startup">
-                            <span>Startup</span>
-                        </label>
-                        <label class="interest-chip">
-                            <input type="checkbox" name="interests" value="finance">
-                            <span>Finance</span>
-                        </label>
-                        <label class="interest-chip">
-                            <input type="checkbox" name="interests" value="marketing">
-                            <span>Marketing</span>
-                        </label>
-                        <label class="interest-chip">
-                            <input type="checkbox" name="interests" value="healthcare">
-                            <span>Healthcare</span>
-                        </label>
-                        <label class="interest-chip">
-                            <input type="checkbox" name="interests" value="legal">
-                            <span>Legal</span>
-                        </label>
-                        <label class="interest-chip featured">
-                            <input type="checkbox" name="interests" value="all" checked>
-                            <span>All Industries</span>
-                        </label>
+                    <div class="newsletter-chip-section" id="nl-city-prefs">
+                        <p class="chip-section-label">Cities</p>
+                        <div class="newsletter-interests">
+                            <label class="interest-chip featured"><input type="checkbox" name="nl-city" value="" checked><span>All Cities</span></label>
+                            <label class="interest-chip"><input type="checkbox" name="nl-city" value="Austin"><span>Austin</span></label>
+                            <label class="interest-chip"><input type="checkbox" name="nl-city" value="San Francisco"><span>SF</span></label>
+                            <label class="interest-chip"><input type="checkbox" name="nl-city" value="New York"><span>NYC</span></label>
+                            <label class="interest-chip"><input type="checkbox" name="nl-city" value="Washington DC"><span>DC</span></label>
+                            <label class="interest-chip"><input type="checkbox" name="nl-city" value="Miami"><span>Miami</span></label>
+                            <label class="interest-chip"><input type="checkbox" name="nl-city" value="Chicago"><span>Chicago</span></label>
+                            <label class="interest-chip"><input type="checkbox" name="nl-city" value="Los Angeles"><span>LA</span></label>
+                            <label class="interest-chip"><input type="checkbox" name="nl-city" value="Seattle"><span>Seattle</span></label>
+                            <label class="interest-chip"><input type="checkbox" name="nl-city" value="Denver"><span>Denver</span></label>
+                            <label class="interest-chip"><input type="checkbox" name="nl-city" value="Boston"><span>Boston</span></label>
+                        </div>
+                    </div>
+
+                    <div class="newsletter-chip-section" id="nl-industry-prefs">
+                        <p class="chip-section-label">Industries</p>
+                        <div class="newsletter-interests">
+                            <label class="interest-chip featured"><input type="checkbox" name="nl-industry" value="" checked><span>All Industries</span></label>
+                            <label class="interest-chip"><input type="checkbox" name="nl-industry" value="Technology"><span>Technology</span></label>
+                            <label class="interest-chip"><input type="checkbox" name="nl-industry" value="AI"><span>AI</span></label>
+                            <label class="interest-chip"><input type="checkbox" name="nl-industry" value="Startup"><span>Startup</span></label>
+                            <label class="interest-chip"><input type="checkbox" name="nl-industry" value="Finance"><span>Finance</span></label>
+                            <label class="interest-chip"><input type="checkbox" name="nl-industry" value="Marketing"><span>Marketing</span></label>
+                            <label class="interest-chip"><input type="checkbox" name="nl-industry" value="Healthcare"><span>Healthcare</span></label>
+                            <label class="interest-chip"><input type="checkbox" name="nl-industry" value="Legal"><span>Legal</span></label>
+                        </div>
                     </div>
 
                     <div class="newsletter-input-group">
                         <input type="email" id="newsletter-email" name="email" placeholder="your@email.com" required class="newsletter-input" aria-label="Email address">
-                        <button type="submit" class="newsletter-btn">Subscribe</button>
+                        <button type="submit" class="newsletter-btn">Get My Alerts</button>
                     </div>
                 </form>
 
                 <p id="newsletter-message" class="newsletter-message"></p>
-                <p class="newsletter-note">Join professionals across the US. Unsubscribe anytime.</p>
+                <p class="newsletter-note">Weekly alerts, personalized to you. Unsubscribe anytime.</p>
             </div>
         </div>
     </section>
@@ -225,15 +221,47 @@
             <button class="modal-close" onclick="closeLoginModal()" aria-label="Close">&times;</button>
             <div class="modal-body">
                 <h2>Join Conferix</h2>
-                <p class="modal-subtitle">Get curated event updates for your profession, straight to your inbox.</p>
+                <p class="modal-subtitle">Get personalized event alerts for your city and industry, every Monday.</p>
                 <form id="login-form" onsubmit="handleLoginSubmit(event)">
                     <input type="text" id="login-name" name="first_name" placeholder="Your name" required class="input-field">
                     <input type="email" id="login-email" name="email" placeholder="Your email address" required class="input-field">
-                    <button type="submit" class="btn-primary btn-full">Sign Up</button>
+
+                    <div class="alert-prefs-group" id="modal-city-prefs">
+                        <p class="prefs-label">Cities you care about</p>
+                        <div class="chip-grid">
+                            <label class="pref-chip"><input type="checkbox" name="modal-city" value="" checked><span>All Cities</span></label>
+                            <label class="pref-chip"><input type="checkbox" name="modal-city" value="Austin"><span>Austin</span></label>
+                            <label class="pref-chip"><input type="checkbox" name="modal-city" value="San Francisco"><span>SF</span></label>
+                            <label class="pref-chip"><input type="checkbox" name="modal-city" value="New York"><span>NYC</span></label>
+                            <label class="pref-chip"><input type="checkbox" name="modal-city" value="Washington DC"><span>DC</span></label>
+                            <label class="pref-chip"><input type="checkbox" name="modal-city" value="Miami"><span>Miami</span></label>
+                            <label class="pref-chip"><input type="checkbox" name="modal-city" value="Chicago"><span>Chicago</span></label>
+                            <label class="pref-chip"><input type="checkbox" name="modal-city" value="Los Angeles"><span>LA</span></label>
+                            <label class="pref-chip"><input type="checkbox" name="modal-city" value="Seattle"><span>Seattle</span></label>
+                            <label class="pref-chip"><input type="checkbox" name="modal-city" value="Denver"><span>Denver</span></label>
+                            <label class="pref-chip"><input type="checkbox" name="modal-city" value="Boston"><span>Boston</span></label>
+                        </div>
+                    </div>
+
+                    <div class="alert-prefs-group" id="modal-industry-prefs">
+                        <p class="prefs-label">Industries you follow</p>
+                        <div class="chip-grid">
+                            <label class="pref-chip"><input type="checkbox" name="modal-industry" value="" checked><span>All Industries</span></label>
+                            <label class="pref-chip"><input type="checkbox" name="modal-industry" value="Technology"><span>Technology</span></label>
+                            <label class="pref-chip"><input type="checkbox" name="modal-industry" value="AI"><span>AI</span></label>
+                            <label class="pref-chip"><input type="checkbox" name="modal-industry" value="Startup"><span>Startup</span></label>
+                            <label class="pref-chip"><input type="checkbox" name="modal-industry" value="Finance"><span>Finance</span></label>
+                            <label class="pref-chip"><input type="checkbox" name="modal-industry" value="Marketing"><span>Marketing</span></label>
+                            <label class="pref-chip"><input type="checkbox" name="modal-industry" value="Healthcare"><span>Healthcare</span></label>
+                            <label class="pref-chip"><input type="checkbox" name="modal-industry" value="Legal"><span>Legal</span></label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-primary btn-full">Get My Alerts</button>
                     <button type="button" id="skip-login" class="btn-text btn-full" onclick="closeLoginModal()">Skip - Continue Browsing</button>
                 </form>
                 <p id="login-message" class="message"></p>
-                <p class="privacy-note">No spam. Unsubscribe anytime.</p>
+                <p class="privacy-note">Weekly alerts, personalized to you. Unsubscribe anytime.</p>
             </div>
         </div>
     </div>

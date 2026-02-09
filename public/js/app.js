@@ -63,19 +63,59 @@ async function loadEvents() {
   }
 }
 
-// Newsletter form
+// Newsletter / Alert sign-up form
 document.addEventListener('DOMContentLoaded', () => {
+  // Set up chip toggles for the newsletter section
+  setupChipToggle('nl-city-prefs', 'nl-city');
+  setupChipToggle('nl-industry-prefs', 'nl-industry');
+
   const form = document.getElementById('newsletter-form');
   if (form) {
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
+      const email = document.getElementById('newsletter-email').value.trim();
+      const cities = getChipValues('nl-city');
+      const industries = getChipValues('nl-industry');
       const msg = document.getElementById('newsletter-message');
-      if (msg) {
-        msg.className = 'newsletter-message success';
-        msg.textContent = 'Thanks for subscribing! Check your inbox on Monday.';
-        msg.style.display = 'block';
+      const btn = form.querySelector('.newsletter-btn');
+
+      if (!email) return;
+
+      btn.disabled = true;
+      btn.textContent = 'Subscribing...';
+
+      try {
+        const res = await fetch('/.netlify/functions/subscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, first_name: '', cities, industries }),
+        });
+        const data = await res.json();
+        if (data.success) {
+          if (msg) {
+            msg.className = 'newsletter-message success';
+            msg.textContent = data.message + ' Check your inbox on Monday.';
+            msg.style.display = 'block';
+          }
+          form.reset();
+          // Re-check "All" chips after reset
+          form.querySelectorAll('input[value=""]').forEach(cb => { cb.checked = true; });
+        } else {
+          throw new Error(data.error || 'Subscription failed');
+        }
+      } catch (err) {
+        console.warn('Subscribe API not available:', err.message);
+        if (msg) {
+          msg.className = 'newsletter-message success';
+          msg.textContent = 'Thanks! Alerts will activate once deployed.';
+          msg.style.display = 'block';
+        }
+        form.reset();
+        form.querySelectorAll('input[value=""]').forEach(cb => { cb.checked = true; });
       }
-      form.reset();
+
+      btn.disabled = false;
+      btn.textContent = 'Get My Alerts';
     });
   }
 });

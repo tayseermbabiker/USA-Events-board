@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unsubscribe | Conferix USA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f1f5f9;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 48px 32px;
+            max-width: 440px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+        }
+        .logo {
+            font-family: 'DM Serif Display', serif;
+            font-size: 28px;
+            color: #0B1426;
+            margin-bottom: 24px;
+        }
+        .logo span { color: #D4A853; }
+        h1 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 22px;
+            font-weight: 400;
+            color: #0B1426;
+            margin-bottom: 12px;
+        }
+        p { color: #64748b; font-size: 15px; line-height: 1.6; margin-bottom: 16px; }
+        .status { display: none; }
+        .status.active { display: block; }
+        .spinner {
+            width: 32px; height: 32px;
+            margin: 0 auto 16px;
+            border: 3px solid #e2e8f0;
+            border-top-color: #2DD4BF;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .success-icon { font-size: 48px; margin-bottom: 16px; }
+        .error-icon { font-size: 48px; margin-bottom: 16px; }
+        a {
+            color: #1E3A5F;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="logo">Conferix <span>USA</span></div>
+
+        <div id="loading" class="status active">
+            <div class="spinner"></div>
+            <h1>Unsubscribing...</h1>
+            <p>Please wait a moment.</p>
+        </div>
+
+        <div id="success" class="status">
+            <div class="success-icon">&#10003;</div>
+            <h1>You've Been Unsubscribed</h1>
+            <p>You won't receive any more event alerts from us. If you change your mind, you can always subscribe again.</p>
+            <a href="/">Back to Conferix</a>
+        </div>
+
+        <div id="error" class="status">
+            <div class="error-icon">&#10007;</div>
+            <h1>Something Went Wrong</h1>
+            <p id="error-msg">We couldn't process your unsubscribe request. The link may be invalid or expired.</p>
+            <a href="/">Back to Conferix</a>
+        </div>
+    </div>
+
+    <script>
+        (async function() {
+            const params = new URLSearchParams(window.location.search);
+            const token = params.get('token');
+
+            if (!token) {
+                show('error', 'No unsubscribe token found. Please use the link from your email.');
+                return;
+            }
+
+            try {
+                const res = await fetch(`/.netlify/functions/unsubscribe?token=${encodeURIComponent(token)}`);
+                const data = await res.json();
+                if (data.success) {
+                    show('success');
+                } else {
+                    show('error', data.error || 'Unsubscribe failed.');
+                }
+            } catch (err) {
+                show('error', 'Could not reach the server. Please try again later.');
+            }
+
+            function show(id, msg) {
+                document.getElementById('loading').classList.remove('active');
+                document.getElementById(id).classList.add('active');
+                if (msg) document.getElementById('error-msg').textContent = msg;
+            }
+        })();
+    </script>
+</body>
+</html>
