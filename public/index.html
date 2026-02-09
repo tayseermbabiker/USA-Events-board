@@ -38,7 +38,7 @@
                 </div>
                 <div class="header-actions">
                     <a href="/submit.html" class="btn-create">+ Create Event</a>
-                    <button id="login-btn" class="btn-login">Login</button>
+                    <button id="login-btn" class="btn-login">Sign Up</button>
                 </div>
             </div>
         </div>
@@ -224,12 +224,12 @@
         <div class="modal-sheet modal-small" onclick="event.stopPropagation()">
             <button class="modal-close" onclick="closeLoginModal()" aria-label="Close">&times;</button>
             <div class="modal-body">
-                <h2>Quick Login</h2>
-                <p class="modal-subtitle">Save events and get personalized recommendations</p>
+                <h2>Join Conferix</h2>
+                <p class="modal-subtitle">Get curated event updates for your profession, straight to your inbox.</p>
                 <form id="login-form" onsubmit="handleLoginSubmit(event)">
                     <input type="text" id="login-name" name="first_name" placeholder="Your name" required class="input-field">
                     <input type="email" id="login-email" name="email" placeholder="Your email address" required class="input-field">
-                    <button type="submit" class="btn-primary btn-full">Continue</button>
+                    <button type="submit" class="btn-primary btn-full">Sign Up</button>
                     <button type="button" id="skip-login" class="btn-text btn-full" onclick="closeLoginModal()">Skip - Continue Browsing</button>
                 </form>
                 <p id="login-message" class="message"></p>
