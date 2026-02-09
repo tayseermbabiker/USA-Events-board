@@ -503,6 +503,28 @@ body {
 .description { margin: var(--space-lg) 0; }
 .description strong { display: block; margin-bottom: var(--space-sm); color: var(--navy-dark); font-size: var(--font-large); }
 
+/* ===== ADD TO CALENDAR ===== */
+.btn-cal {
+  flex: 1;
+  display: inline-block;
+  padding: var(--space-sm) var(--space-md);
+  background: transparent;
+  color: var(--primary-navy);
+  border: 2px solid var(--grey-medium);
+  border-radius: var(--radius-md);
+  font-size: var(--font-small);
+  font-weight: 600;
+  cursor: pointer;
+  min-height: var(--touch-target);
+  text-align: center;
+  text-decoration: none;
+  transition: all var(--transition-base);
+}
+.btn-cal:active {
+  background: var(--grey-light);
+  transform: scale(0.97);
+}
+
 /* ===== FORM INPUTS ===== */
 .input-field {
   width: 100%;

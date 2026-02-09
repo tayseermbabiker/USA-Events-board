@@ -1,5 +1,56 @@
 // Modal System
 
+function buildGoogleCalendarUrl(event) {
+  const title = encodeURIComponent(event.title || '');
+  // Format date as YYYYMMDD
+  const formatDate = (d) => d ? d.replace(/-/g, '') : '';
+  const start = formatDate(event.start_date);
+  const end = formatDate(event.end_date || event.start_date);
+  // For all-day events, end date needs to be next day
+  const endDate = end || start;
+  const nextDay = endDate ? String(Number(endDate) + 1) : '';
+  const location = encodeURIComponent(
+    [event.venue_name, event.city].filter(Boolean).join(', ')
+  );
+  const details = encodeURIComponent(
+    (event.description ? event.description.substring(0, 500) + '\n\n' : '') +
+    (event.registration_url ? 'Register: ' + event.registration_url : '')
+  );
+  return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${start}/${nextDay}&location=${location}&details=${details}`;
+}
+
+function downloadICS(event) {
+  const formatDate = (d) => d ? d.replace(/-/g, '') : '';
+  const start = formatDate(event.start_date);
+  const end = formatDate(event.end_date || event.start_date);
+  const nextDay = end ? String(Number(end) + 1) : String(Number(start) + 1);
+  const location = [event.venue_name, event.city].filter(Boolean).join(', ');
+  const desc = (event.description || '').substring(0, 500).replace(/\n/g, '\\n');
+  const url = event.registration_url || '';
+
+  const ics = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//Conferix//USA//EN',
+    'BEGIN:VEVENT',
+    `DTSTART;VALUE=DATE:${start}`,
+    `DTEND;VALUE=DATE:${nextDay}`,
+    `SUMMARY:${event.title || ''}`,
+    `LOCATION:${location}`,
+    `DESCRIPTION:${desc}${url ? '\\nRegister: ' + url : ''}`,
+    `URL:${url}`,
+    'END:VEVENT',
+    'END:VCALENDAR'
+  ].join('\r\n');
+
+  const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = (event.title || 'event').replace(/[^a-z0-9]/gi, '_') + '.ics';
+  link.click();
+  URL.revokeObjectURL(link.href);
+}
+
 function openEventModal(event) {
   const modal = document.getElementById('event-modal');
   const body = document.getElementById('modal-body');
@@ -77,6 +128,10 @@ function buildEventModalContent(event) {
     <button class="btn-primary btn-full" onclick="window.open('${escapeHtml(regUrl)}','_blank','noopener,noreferrer')" style="margin-top:var(--space-lg);">
       ${event.is_free ? 'Register for Free' : 'Book Now'}
     </button>
+    <div class="cal-buttons" style="display:flex;gap:var(--space-sm);margin-top:var(--space-md);">
+      <a href="${buildGoogleCalendarUrl(event)}" target="_blank" rel="noopener" class="btn-cal">Google Calendar</a>
+      <button type="button" class="btn-cal" onclick='downloadICS(${JSON.stringify({title:event.title,start_date:event.start_date,end_date:event.end_date,venue_name:event.venue_name,city:event.city,description:event.description,registration_url:event.registration_url})})'>Outlook / Apple</button>
+    </div>
     <div style="margin-top:var(--space-lg);text-align:center;">
       <p style="font-size:14px;color:var(--grey-dark);margin-bottom:var(--space-sm);">Share this event</p>
       <div style="display:flex;gap:var(--space-sm);justify-content:center;flex-wrap:wrap;">
