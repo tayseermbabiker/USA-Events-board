@@ -145,6 +145,28 @@ body {
   position: relative;
   z-index: 1;
 }
+.hero-cta {
+  display: inline-block;
+  margin-top: var(--space-lg);
+  padding: var(--space-md) var(--space-xl);
+  background: var(--accent-gold);
+  color: var(--navy-dark);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: var(--font-base);
+  font-weight: 700;
+  cursor: pointer;
+  min-height: var(--touch-target);
+  box-shadow: 0 4px 20px rgba(212,168,83,0.4);
+  transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+  position: relative;
+  z-index: 1;
+  letter-spacing: 0.3px;
+}
+.hero-cta:active {
+  transform: scale(0.96);
+  box-shadow: 0 2px 12px rgba(212,168,83,0.3);
+}
 
 /* ===== FILTERS ===== */
 .filters-section {

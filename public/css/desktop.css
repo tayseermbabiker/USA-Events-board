@@ -46,6 +46,10 @@
     transform: translateY(-2px);
   }
   .btn-text:hover { color: var(--teal-dark); }
+  .hero-cta:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(212,168,83,0.5);
+  }
   .modal-sheet { max-width: 800px; }
 }
 @media (min-width: 1440px) {
