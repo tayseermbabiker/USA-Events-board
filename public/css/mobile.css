@@ -15,7 +15,7 @@ body {
 .header {
   background: linear-gradient(135deg, #0B1426 0%, #1C2333 50%, #0B1426 100%);
   color: var(--white);
-  padding: var(--space-lg) 0;
+  padding: 10px 0;
   box-shadow: 0 4px 20px rgba(11,20,38,0.4), 0 2px 8px rgba(30,58,95,0.2);
   position: sticky;
   top: 0;
@@ -38,7 +38,7 @@ body {
 }
 .logo h1 {
   font-family: var(--font-serif);
-  font-size: var(--font-xlarge);
+  font-size: 20px;
   font-weight: 400;
   margin: 0;
   letter-spacing: -0.5px;
@@ -53,7 +53,7 @@ body {
   opacity: 0.85;
 }
 .tagline {
-  font-size: var(--font-small);
+  font-size: 11px;
   opacity: 0.85;
   margin: 0;
   font-weight: 400;
@@ -62,9 +62,11 @@ body {
 .header-actions {
   display: flex;
   align-items: center;
-  gap: var(--space-sm);
+  gap: 6px;
 }
+/* Hidden on mobile, shown on tablet+ */
 .btn-create {
+  display: none;
   background: transparent;
   color: var(--white);
   padding: var(--space-sm) var(--space-md);
@@ -75,7 +77,6 @@ body {
   transition: all var(--transition-base);
   border: 1.5px solid rgba(212,168,83,0.6);
   text-decoration: none;
-  display: flex;
   align-items: center;
   white-space: nowrap;
 }
@@ -89,17 +90,32 @@ body {
 .btn-login {
   background: transparent;
   color: var(--accent-gold);
-  padding: var(--space-sm) var(--space-lg);
+  padding: 6px 12px;
   border-radius: var(--radius-md);
-  font-size: var(--font-base);
-  font-weight: 600;
-  min-height: var(--touch-target);
+  font-size: 13px;
+  font-weight: 500;
+  min-height: auto;
   transition: all var(--transition-base);
-  border: 1.5px solid var(--accent-gold);
+  border: none;
 }
 .btn-login:active {
-  background: rgba(212,168,83,0.15);
-  transform: scale(0.95);
+  opacity: 0.7;
+}
+.btn-signup {
+  background: var(--accent-gold);
+  color: var(--navy-dark);
+  padding: 6px 14px;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-weight: 600;
+  min-height: auto;
+  border: none;
+  transition: all var(--transition-base);
+  white-space: nowrap;
+}
+.btn-signup:active {
+  opacity: 0.85;
+  transform: scale(0.96);
 }
 
 /* ===== HERO ===== */
@@ -175,7 +191,7 @@ body {
   padding: var(--space-md) 0;
   box-shadow: 0 2px 15px rgba(11,20,38,0.06);
   position: sticky;
-  top: 88px;
+  top: 58px;
   z-index: 500;
   border-bottom: 1px solid rgba(45,55,72,0.1);
 }

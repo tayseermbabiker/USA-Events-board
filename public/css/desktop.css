@@ -1,5 +1,21 @@
 @media (min-width: 768px) {
   .container { max-width: 768px; padding: 0 var(--space-lg); }
+  .header { padding: var(--space-lg) 0; }
+  .logo h1 { font-size: var(--font-xlarge); }
+  .tagline { font-size: var(--font-small); }
+  .header-actions { gap: var(--space-sm); }
+  .btn-create { display: flex; }
+  .btn-login {
+    font-size: var(--font-base);
+    padding: var(--space-sm) var(--space-lg);
+    min-height: var(--touch-target);
+    border: 1.5px solid var(--accent-gold);
+  }
+  .btn-signup {
+    font-size: var(--font-base);
+    padding: var(--space-sm) var(--space-lg);
+    min-height: var(--touch-target);
+  }
   .hero-section { padding: 20px 0 14px; }
   .hero-headline { font-size: 36px; }
   .events-grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-lg); }
