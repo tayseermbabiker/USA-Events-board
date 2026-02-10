@@ -105,7 +105,7 @@ body {
 /* ===== HERO ===== */
 .hero-section {
   background: linear-gradient(135deg, #0B1426 0%, #1C2333 50%, #0B1426 100%);
-  padding: 32px 0;
+  padding: 14px 0 10px;
   text-align: center;
   position: relative;
   overflow: hidden;
@@ -130,23 +130,23 @@ body {
 }
 .hero-headline {
   font-family: var(--font-serif);
-  font-size: var(--font-hero);
+  font-size: 28px;
   font-weight: 400;
   color: var(--white);
-  margin: 0 0 var(--space-md) 0;
+  margin: 0 0 var(--space-xs) 0;
   line-height: 1.15;
   position: relative;
   z-index: 1;
 }
 .hero-subtitle {
-  font-size: var(--font-large);
-  color: rgba(255,255,255,0.75);
+  font-size: var(--font-base);
+  color: rgba(255,255,255,0.65);
   margin: 0;
   position: relative;
   z-index: 1;
 }
 .hero-cta {
-  display: inline-block;
+  display: none;
   margin-top: var(--space-md);
   padding: var(--space-md) var(--space-xl);
   background: var(--accent-gold);

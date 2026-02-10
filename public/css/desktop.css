@@ -1,7 +1,7 @@
 @media (min-width: 768px) {
   .container { max-width: 768px; padding: 0 var(--space-lg); }
-  .hero-section { padding: 28px 0 20px; }
-  .hero-headline { font-size: 48px; }
+  .hero-section { padding: 20px 0 14px; }
+  .hero-headline { font-size: 36px; }
   .events-grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-lg); }
   .newsletter-input-group { flex-direction: row; }
   .newsletter-input { flex: 1; }
