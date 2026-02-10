@@ -33,8 +33,9 @@ function buildDigestEmail(subscriber, events, dateFrom, dateTo) {
     const num = i + 1;
     const shortDate = formatDate(ev.start_date);
     const city = ev.city ? `, ${ev.city}` : '';
+    const goUrl = `${SITE_URL}/.netlify/functions/go?id=${ev.id}`;
     const title = ev.registration_url
-      ? `<a href="${ev.registration_url}" style="color:#1E3A5F;text-decoration:none;font-weight:600;">${ev.title}</a>`
+      ? `<a href="${goUrl}" style="color:#1E3A5F;text-decoration:none;font-weight:600;">${ev.title}</a>`
       : `<strong>${ev.title}</strong>`;
 
     return `<tr><td style="padding:6px 0;font-size:14px;color:#0B1426;line-height:1.5;">${num}. ${title} — <span style="color:#64748b;">${shortDate}${city}</span></td></tr>`;
@@ -117,6 +118,7 @@ exports.handler = async (event) => {
     }).all();
 
     const events = allEvents.map(r => ({
+      id: r.id,
       title: r.get('title'),
       start_date: r.get('start_date'),
       end_date: r.get('end_date'),
