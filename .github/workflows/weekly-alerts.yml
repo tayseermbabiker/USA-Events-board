@@ -1,0 +1,14 @@
+name: Send Weekly Alerts
+
+on:
+  schedule:
+    - cron: '0 8 * * 1'  # Every Monday 8AM UTC
+  workflow_dispatch:       # Manual trigger for testing
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger weekly alert emails
+        run: |
+          curl -sf -X POST "${{ secrets.ALERTS_URL }}?key=${{ secrets.ALERTS_SECRET }}"
