@@ -5,3 +5,10 @@
 [functions]
   node_bundler = "esbuild"
   external_node_modules = ["resend"]
+
+# Self-rewrite: allow standalone .netlify.app URL to work under /usa/ subpath
+[[redirects]]
+  from = "/usa/*"
+  to = "/:splat"
+  status = 200
+  force = true

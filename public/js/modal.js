@@ -217,7 +217,7 @@ async function handleLoginSubmit(e) {
 
   // POST to subscribe endpoint
   try {
-    const res = await fetch('/.netlify/functions/subscribe', {
+    const res = await fetch('.netlify/functions/subscribe', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, first_name: name, cities, industries }),

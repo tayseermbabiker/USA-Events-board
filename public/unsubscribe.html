@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <base href="/usa/">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Unsubscribe | Conferix USA</title>
@@ -77,14 +78,14 @@
             <div class="success-icon">&#10003;</div>
             <h1>You've Been Unsubscribed</h1>
             <p>You won't receive any more event alerts from us. If you change your mind, you can always subscribe again.</p>
-            <a href="/">Back to Conferix</a>
+            <a href="./">Back to Conferix</a>
         </div>
 
         <div id="error" class="status">
             <div class="error-icon">&#10007;</div>
             <h1>Something Went Wrong</h1>
             <p id="error-msg">We couldn't process your unsubscribe request. The link may be invalid or expired.</p>
-            <a href="/">Back to Conferix</a>
+            <a href="./">Back to Conferix</a>
         </div>
     </div>
 
@@ -99,7 +100,7 @@
             }
 
             try {
-                const res = await fetch(`/.netlify/functions/unsubscribe?token=${encodeURIComponent(token)}`);
+                const res = await fetch(`.netlify/functions/unsubscribe?token=${encodeURIComponent(token)}`);
                 const data = await res.json();
                 if (data.success) {
                     show('success');

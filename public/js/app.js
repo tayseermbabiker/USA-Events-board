@@ -41,7 +41,7 @@ async function loadEvents() {
   try {
     showLoading();
 
-    const apiUrl = '/.netlify/functions/get-events';
+    const apiUrl = '.netlify/functions/get-events';
     const response = await fetch(apiUrl);
 
     if (!response.ok) throw new Error(`API error: ${response.status}`);
@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.textContent = 'Subscribing...';
 
       try {
-        const res = await fetch('/.netlify/functions/subscribe', {
+        const res = await fetch('.netlify/functions/subscribe', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, first_name: '', cities, industries }),

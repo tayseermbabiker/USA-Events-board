@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <base href="/usa/">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Submit your professional event to Conferix. Free listing for business conferences, networking events, and industry meetups in the US.">
@@ -19,10 +20,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="/css/reset.css">
-    <link rel="stylesheet" href="/css/theme.css">
-    <link rel="stylesheet" href="/css/mobile.css">
-    <link rel="stylesheet" href="/css/desktop.css">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/mobile.css">
+    <link rel="stylesheet" href="css/desktop.css">
 
     <style>
         .submit-page {
@@ -236,7 +237,7 @@
 
     <header class="submit-header">
         <div class="container">
-            <a href="/" class="back-link">&larr; Back to Events</a>
+            <a href="./" class="back-link">&larr; Back to Events</a>
             <h1>Create Your Event</h1>
             <p>Get your professional event in front of the US business community</p>
         </div>
@@ -404,7 +405,7 @@
                     contact_email: formData.get('contact_email')
                 };
 
-                const response = await fetch('/.netlify/functions/submit-event', {
+                const response = await fetch('.netlify/functions/submit-event', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)

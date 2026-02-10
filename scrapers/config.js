@@ -4,7 +4,7 @@ module.exports = {
     tableName: 'Events',
   },
 
-  webhookUrl: process.env.WEBHOOK_URL || 'https://YOUR-USA-SITE.netlify.app/.netlify/functions/receive-events',
+  webhookUrl: process.env.WEBHOOK_URL || 'https://conferix.com/usa/.netlify/functions/receive-events',
 
   browser: {
     headless: true,
