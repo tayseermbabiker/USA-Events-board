@@ -19,22 +19,7 @@ const MOCK_EVENTS = [
 async function initApp() {
   // Init login state
   const user = getLoggedInUser();
-  const loginBtn = document.getElementById('login-btn');
-  if (loginBtn) {
-    if (user) {
-      loginBtn.textContent = 'Hi, ' + (user.first_name || 'User');
-      loginBtn.onclick = () => {
-        const confirmLogout = confirm(`Hi ${user.first_name}!\n\nWould you like to logout?`);
-        if (confirmLogout) {
-          removeUser();
-          loginBtn.textContent = 'Sign In';
-          loginBtn.onclick = openLoginModal;
-        }
-      };
-    } else {
-      loginBtn.onclick = openLoginModal;
-    }
-  }
+  updateAuthUI(user);
 
   // Initialize filters
   initializeFilters();

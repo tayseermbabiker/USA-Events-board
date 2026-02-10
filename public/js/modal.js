@@ -164,6 +164,78 @@ function closeLoginModal() {
   }
 }
 
+function openQuickLoginModal() {
+  const modal = document.getElementById('quick-login-modal');
+  if (modal) {
+    modal.style.display = 'block';
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function closeQuickLoginModal() {
+  const modal = document.getElementById('quick-login-modal');
+  if (modal) {
+    modal.classList.remove('active');
+    modal.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+}
+
+async function handleQuickLogin(e) {
+  e.preventDefault();
+  const email = document.getElementById('quick-login-email').value.trim();
+  const msgEl = document.getElementById('quick-login-message');
+  if (!email) return;
+
+  try {
+    const res = await fetch('.netlify/functions/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, login_only: true }),
+    });
+    const data = await res.json();
+
+    if (data.success && data.user) {
+      saveUser({ first_name: data.user.first_name, email });
+      updateAuthUI({ first_name: data.user.first_name, email });
+      if (msgEl) { msgEl.className = 'message success'; msgEl.textContent = 'Welcome back!'; }
+      setTimeout(closeQuickLoginModal, 1500);
+    } else {
+      if (msgEl) { msgEl.className = 'message error'; msgEl.textContent = data.error || 'No account found. Please sign up first.'; }
+    }
+  } catch (err) {
+    if (msgEl) { msgEl.className = 'message error'; msgEl.textContent = 'Something went wrong. Please try again.'; }
+  }
+}
+
+function updateAuthUI(user) {
+  const loginBtn = document.getElementById('login-btn');
+  const signupBtn = document.getElementById('signup-btn');
+
+  if (user) {
+    if (loginBtn) {
+      loginBtn.textContent = 'Hi, ' + (user.first_name || 'User');
+      loginBtn.onclick = () => {
+        if (confirm('Hi ' + (user.first_name || '') + '!\n\nWould you like to logout?')) {
+          removeUser();
+          updateAuthUI(null);
+        }
+      };
+    }
+    if (signupBtn) signupBtn.style.display = 'none';
+  } else {
+    if (loginBtn) {
+      loginBtn.textContent = 'Log In';
+      loginBtn.onclick = openQuickLoginModal;
+    }
+    if (signupBtn) {
+      signupBtn.style.display = '';
+      signupBtn.onclick = openLoginModal;
+    }
+  }
+}
+
 // Chip toggle: selecting specific chips unchecks "All", unchecking all re-checks "All"
 function setupChipToggle(containerId, inputName) {
   const container = document.getElementById(containerId);
@@ -210,10 +282,9 @@ async function handleLoginSubmit(e) {
   const industries = getChipValues('modal-industry');
   const msgEl = document.getElementById('login-message');
 
-  // Save locally
+  // Save locally and update UI
   saveUser({ first_name: name, email: email });
-  const loginBtn = document.getElementById('login-btn');
-  if (loginBtn) loginBtn.textContent = 'Hi, ' + name;
+  updateAuthUI({ first_name: name, email: email });
 
   // POST to subscribe endpoint
   try {
@@ -247,5 +318,6 @@ function handleEscapeKey(e) {
   if (e.key === 'Escape') {
     closeEventModal();
     closeLoginModal();
+    closeQuickLoginModal();
   }
 }

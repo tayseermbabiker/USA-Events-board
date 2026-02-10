@@ -96,13 +96,39 @@ exports.handler = async (event) => {
   try {
     const body = JSON.parse(event.body);
     const email = body.email;
-    const first_name = body.first_name;
-    const cities = body.cities || 'All Cities';
-    const industries = body.industries || 'All Industries';
 
     if (!email) {
       return { statusCode: 400, headers, body: JSON.stringify({ error: 'Email is required' }) };
     }
+
+    // Login-only: look up subscriber without updating
+    if (body.login_only) {
+      const found = await SUBSCRIBERS.select({
+        filterByFormula: `{email} = '${email.replace(/'/g, "\\'")}'`,
+        maxRecords: 1,
+      }).firstPage();
+
+      if (found.length > 0) {
+        return {
+          statusCode: 200,
+          headers,
+          body: JSON.stringify({
+            success: true,
+            user: { first_name: found[0].get('first_name') || '', email },
+            message: 'Welcome back!',
+          }),
+        };
+      }
+      return {
+        statusCode: 404,
+        headers,
+        body: JSON.stringify({ success: false, error: 'No account found. Please sign up first.' }),
+      };
+    }
+
+    const first_name = body.first_name;
+    const cities = body.cities || 'All Cities';
+    const industries = body.industries || 'All Industries';
 
     // Check if subscriber already exists
     const existing = await SUBSCRIBERS.select({

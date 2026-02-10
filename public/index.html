@@ -46,7 +46,8 @@
                 </div>
                 <div class="header-actions">
                     <a href="submit.html" class="btn-create">+ Create Event</a>
-                    <button id="login-btn" class="btn-login">Sign In</button>
+                    <button id="login-btn" class="btn-login">Log In</button>
+                    <button id="signup-btn" class="btn-login" style="background:var(--accent-gold);color:var(--navy-dark);font-weight:600;">Sign Up</button>
                 </div>
             </div>
         </div>
@@ -229,8 +230,8 @@
         <div class="modal-sheet modal-small" onclick="event.stopPropagation()">
             <button class="modal-close" onclick="closeLoginModal()" aria-label="Close">&times;</button>
             <div class="modal-body">
-                <h2>Welcome to Conferix</h2>
-                <p class="modal-subtitle">New or returning — enter your details to get personalized event alerts every Monday.</p>
+                <h2>Sign Up for Alerts</h2>
+                <p class="modal-subtitle">Choose your preferences and get personalized event alerts every Monday.</p>
                 <form id="login-form" onsubmit="handleLoginSubmit(event)">
                     <input type="text" id="login-name" name="first_name" placeholder="Your name" required class="input-field">
                     <input type="email" id="login-email" name="email" placeholder="Your email address" required class="input-field">
@@ -271,6 +272,24 @@
                 </form>
                 <p id="login-message" class="message"></p>
                 <p class="privacy-note">Weekly alerts, personalized to you. Unsubscribe anytime.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Login Modal -->
+    <div class="login-modal" id="quick-login-modal" style="display: none;">
+        <div class="modal-overlay" onclick="closeQuickLoginModal()"></div>
+        <div class="modal-sheet modal-small" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeQuickLoginModal()" aria-label="Close">&times;</button>
+            <div class="modal-body">
+                <h2 style="margin-bottom:var(--space-sm);color:var(--navy-dark);font-family:var(--font-serif);font-weight:400;">Welcome Back</h2>
+                <p class="modal-subtitle">Enter your email to log in.</p>
+                <form id="quick-login-form" onsubmit="handleQuickLogin(event)">
+                    <input type="email" id="quick-login-email" placeholder="Your email address" required class="input-field" aria-label="Email address">
+                    <button type="submit" class="btn-primary btn-full">Log In</button>
+                </form>
+                <p id="quick-login-message" class="message"></p>
+                <p class="privacy-note">Don't have an account? <a href="#" onclick="closeQuickLoginModal();openLoginModal();return false;" style="color:var(--accent-gold);font-weight:600;">Sign Up</a></p>
             </div>
         </div>
     </div>
