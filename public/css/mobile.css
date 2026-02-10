@@ -147,7 +147,7 @@ body {
 }
 .hero-cta {
   display: inline-block;
-  margin-top: var(--space-lg);
+  margin-top: var(--space-md);
   padding: var(--space-md) var(--space-xl);
   background: var(--accent-gold);
   color: var(--navy-dark);
