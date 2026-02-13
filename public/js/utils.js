@@ -80,7 +80,7 @@ function saveUser(user) {
 function getNext6Months() {
   const months = [];
   const names = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-  for (let i = 0; i < 6; i++) {
+  for (let i = 0; i < 12; i++) {
     const d = new Date();
     d.setMonth(d.getMonth() + i);
     months.push({
