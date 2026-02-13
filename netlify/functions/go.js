@@ -25,6 +25,14 @@ function buildEventPage(ev, related) {
   const regUrl = ev.registration_url || '';
   const imageUrl = ev.image_url || '';
 
+  // Google Calendar link
+  const calStart = (ev.start_date || '').replace(/-/g, '');
+  const calEnd = ev.end_date ? ev.end_date.replace(/-/g, '') : calStart;
+  const calTitle = encodeURIComponent(title);
+  const calDetails = encodeURIComponent(desc.substring(0, 200) + (regUrl ? `\n\nRegister: ${regUrl}` : ''));
+  const calLocation = encodeURIComponent([venue, address, city].filter(Boolean).join(', '));
+  const calUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${calTitle}&dates=${calStart}/${calEnd}&details=${calDetails}&location=${calLocation}`;
+
   const imageBanner = imageUrl
     ? `<img src="${imageUrl}" alt="${title}" style="width:100%;max-height:280px;object-fit:cover;border-radius:8px;margin-bottom:24px;">`
     : '';
@@ -95,11 +103,14 @@ function buildEventPage(ev, related) {
 
           ${desc ? `<p style="margin:0 0 24px;font-size:15px;color:#374151;line-height:1.7;">${desc}</p>` : ''}
 
-          ${regUrl ? `<table cellpadding="0" cellspacing="0" width="100%">
-            <tr><td align="center">
-              <a href="${regUrl}" target="_blank" rel="noopener" style="display:inline-block;padding:14px 36px;background:#1E3A5F;color:#ffffff;border-radius:8px;font-size:16px;font-weight:600;text-decoration:none;">Register on Official Site</a>
+          <table cellpadding="0" cellspacing="0" width="100%">
+            <tr><td align="center" style="padding-bottom:12px;">
+              ${regUrl ? `<a href="${regUrl}" target="_blank" rel="noopener" style="display:inline-block;padding:14px 36px;background:#1E3A5F;color:#ffffff;border-radius:8px;font-size:16px;font-weight:600;text-decoration:none;">Register on Official Site</a>` : ''}
             </td></tr>
-          </table>` : ''}
+            <tr><td align="center">
+              <a href="${calUrl}" target="_blank" rel="noopener" style="display:inline-block;padding:10px 24px;background:#ffffff;color:#1E3A5F;border:2px solid #1E3A5F;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;">Add to Calendar</a>
+            </td></tr>
+          </table>
 
           ${relatedHtml}
         </td></tr>
