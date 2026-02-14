@@ -91,6 +91,21 @@ function getNext6Months() {
   return months;
 }
 
+// Industry-specific gradient for placeholder images
+function getIndustryGradient(industry) {
+  const gradients = {
+    'Technology': 'linear-gradient(135deg, #0B1426 0%, #1E3A5F 100%)',
+    'AI': 'linear-gradient(135deg, #1C2333 0%, #2DD4BF 100%)',
+    'Startup': 'linear-gradient(135deg, #0B1426 0%, #0D9488 100%)',
+    'Finance': 'linear-gradient(135deg, #1C2333 0%, #D4A853 100%)',
+    'Marketing': 'linear-gradient(135deg, #2D3748 0%, #B45309 100%)',
+    'Healthcare': 'linear-gradient(135deg, #0B1426 0%, #0E7490 100%)',
+    'Legal': 'linear-gradient(135deg, #2D3748 0%, #475569 100%)',
+    'General': 'linear-gradient(135deg, #1E3A5F 0%, #5EEAD4 100%)',
+  };
+  return gradients[industry] || gradients['General'];
+}
+
 // Industry color map for badges
 function getIndustryColor(industry) {
   const colors = {

@@ -324,6 +324,19 @@ body {
   height: 100%;
   object-fit: cover;
 }
+.placeholder-industry {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 18px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  pointer-events: none;
+  z-index: 1;
+}
 .event-card-image-wrapper::after {
   content: '';
   position: absolute;

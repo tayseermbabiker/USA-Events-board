@@ -74,7 +74,7 @@ function closeEventModal() {
 function buildEventModalContent(event) {
   const imageHtml = event.image_url
     ? `<img src="${escapeHtml(event.image_url)}" alt="${escapeHtml(event.title)}" class="modal-image">`
-    : `<div class="modal-image" style="background: ${getRandomGradient()};"></div>`;
+    : `<div class="modal-image" style="background: ${getIndustryGradient(event.industry)};display:flex;align-items:center;justify-content:center;"><span style="font-size:22px;font-weight:700;color:rgba(255,255,255,0.85);letter-spacing:1px;">${escapeHtml(event.industry || 'Event')}</span></div>`;
 
   const startDate = formatFullDateTime(event.start_date);
   const endDate = event.end_date && event.end_date !== event.start_date ? formatFullDateTime(event.end_date) : '';

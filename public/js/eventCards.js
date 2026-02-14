@@ -1,5 +1,13 @@
 // Event Card Rendering
 
+function addIndustryPlaceholder(wrapper, industry) {
+  wrapper.style.background = getIndustryGradient(industry);
+  const label = document.createElement('span');
+  label.className = 'placeholder-industry';
+  label.textContent = industry || 'Event';
+  wrapper.appendChild(label);
+}
+
 function createEventCard(event) {
   const card = document.createElement('div');
   card.className = 'event-card';
@@ -15,10 +23,10 @@ function createEventCard(event) {
     img.src = event.image_url;
     img.alt = event.title;
     img.loading = 'lazy';
-    img.onerror = function() { this.parentElement.style.background = getRandomGradient(); this.remove(); };
+    img.onerror = function() { addIndustryPlaceholder(this.parentElement, event.industry); this.remove(); };
     imageWrapper.appendChild(img);
   } else {
-    imageWrapper.style.background = getRandomGradient();
+    addIndustryPlaceholder(imageWrapper, event.industry);
   }
 
   // Industry badge
