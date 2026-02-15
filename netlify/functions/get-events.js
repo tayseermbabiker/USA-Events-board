@@ -6,6 +6,7 @@ exports.handler = async (event) => {
     'Access-Control-Allow-Headers': 'Content-Type',
     'Access-Control-Allow-Methods': 'GET, OPTIONS',
     'Content-Type': 'application/json',
+    'Cache-Control': 'public, max-age=600',
   };
 
   if (event.httpMethod === 'OPTIONS') {
