@@ -64,7 +64,10 @@ document.addEventListener('DOMContentLoaded', () => {
   if (form) {
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
+      const first_name = (document.getElementById('newsletter-name').value || '').trim();
       const email = document.getElementById('newsletter-email').value.trim();
+      const job_title = (document.getElementById('newsletter-job-title').value || '').trim();
+      const company = (document.getElementById('newsletter-company').value || '').trim();
       const cities = getChipValues('nl-city');
       const industries = getChipValues('nl-industry');
       const msg = document.getElementById('newsletter-message');
@@ -79,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const res = await fetch('.netlify/functions/subscribe', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, first_name: '', cities, industries }),
+          body: JSON.stringify({ email, first_name, job_title, company, cities, industries }),
         });
         const data = await res.json();
         if (data.success) {

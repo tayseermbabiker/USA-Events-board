@@ -188,8 +188,13 @@
                         </div>
                     </div>
 
-                    <div class="newsletter-input-group">
-                        <input type="email" id="newsletter-email" name="email" placeholder="your@email.com" required class="newsletter-input" aria-label="Email address">
+                    <div class="newsletter-fields">
+                        <input type="text" id="newsletter-name" name="first_name" placeholder="Your name" required class="newsletter-input" aria-label="Your name">
+                        <input type="email" id="newsletter-email" name="email" placeholder="Work email address" required class="newsletter-input" aria-label="Email address">
+                        <label class="newsletter-field-label" for="newsletter-job-title">Job Title</label>
+                        <input type="text" id="newsletter-job-title" name="job_title" placeholder="e.g. Marketing Manager" required class="newsletter-input" aria-label="Job title">
+                        <label class="newsletter-field-label" for="newsletter-company">Company</label>
+                        <input type="text" id="newsletter-company" name="company" placeholder="Company name" required class="newsletter-input" aria-label="Company name">
                         <button type="submit" class="newsletter-btn">Get My Alerts</button>
                     </div>
                 </form>

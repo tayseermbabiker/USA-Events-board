@@ -674,6 +674,8 @@ body {
 }
 .interest-chip.featured span { background: rgba(45,212,191,0.15); border-color: rgba(45,212,191,0.4); }
 .newsletter-input-group { display: flex; flex-direction: column; gap: var(--space-sm); }
+.newsletter-fields { display: flex; flex-direction: column; gap: var(--space-sm); }
+.newsletter-field-label { font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: -4px; }
 .newsletter-input {
   flex: 1;
   padding: var(--space-md);
