@@ -120,7 +120,7 @@ body {
 
 /* ===== HERO ===== */
 .hero-section {
-  background: url('../img/hero.jpg') center/cover no-repeat;
+  background: url('../img/hero.jpg') center 30%/cover no-repeat;
   padding: 14px 0 10px;
   text-align: center;
   position: relative;
