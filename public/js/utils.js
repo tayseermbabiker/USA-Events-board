@@ -77,6 +77,10 @@ function saveUser(user) {
   localStorage.setItem('user', JSON.stringify(user));
 }
 
+function removeUser() {
+  localStorage.removeItem('user');
+}
+
 function getNext6Months() {
   const months = [];
   const names = ['January','February','March','April','May','June','July','August','September','October','November','December'];
