@@ -159,58 +159,16 @@
         </div>
     </main>
 
-    <!-- Newsletter / Alert Sign-Up Section -->
+    <!-- CTA Section -->
     <section class="newsletter-section" id="newsletter">
         <div class="container">
             <div class="newsletter-box">
-                <h2>Get Personalized Event Alerts</h2>
-                <p>Choose your cities and industries. We'll email you new events every Monday.</p>
-
-                <form id="newsletter-form" class="newsletter-form">
-                    <div class="newsletter-chip-section" id="nl-city-prefs">
-                        <p class="chip-section-label">Cities</p>
-                        <div class="newsletter-interests">
-                            <label class="interest-chip featured"><input type="checkbox" name="nl-city" value="" checked><span>All Cities</span></label>
-                            <label class="interest-chip"><input type="checkbox" name="nl-city" value="Austin"><span>Austin</span></label>
-                            <label class="interest-chip"><input type="checkbox" name="nl-city" value="San Francisco"><span>SF</span></label>
-                            <label class="interest-chip"><input type="checkbox" name="nl-city" value="New York"><span>NYC</span></label>
-                            <label class="interest-chip"><input type="checkbox" name="nl-city" value="Washington DC"><span>DC</span></label>
-                            <label class="interest-chip"><input type="checkbox" name="nl-city" value="Miami"><span>Miami</span></label>
-                            <label class="interest-chip"><input type="checkbox" name="nl-city" value="Chicago"><span>Chicago</span></label>
-                            <label class="interest-chip"><input type="checkbox" name="nl-city" value="Los Angeles"><span>LA</span></label>
-                            <label class="interest-chip"><input type="checkbox" name="nl-city" value="Seattle"><span>Seattle</span></label>
-                            <label class="interest-chip"><input type="checkbox" name="nl-city" value="Denver"><span>Denver</span></label>
-                            <label class="interest-chip"><input type="checkbox" name="nl-city" value="Boston"><span>Boston</span></label>
-                        </div>
-                    </div>
-
-                    <div class="newsletter-chip-section" id="nl-industry-prefs">
-                        <p class="chip-section-label">Industries</p>
-                        <div class="newsletter-interests">
-                            <label class="interest-chip featured"><input type="checkbox" name="nl-industry" value="" checked><span>All Industries</span></label>
-                            <label class="interest-chip"><input type="checkbox" name="nl-industry" value="Technology"><span>Technology</span></label>
-                            <label class="interest-chip"><input type="checkbox" name="nl-industry" value="AI"><span>AI</span></label>
-                            <label class="interest-chip"><input type="checkbox" name="nl-industry" value="Startup"><span>Startup</span></label>
-                            <label class="interest-chip"><input type="checkbox" name="nl-industry" value="Finance"><span>Finance</span></label>
-                            <label class="interest-chip"><input type="checkbox" name="nl-industry" value="Marketing"><span>Marketing</span></label>
-                            <label class="interest-chip"><input type="checkbox" name="nl-industry" value="Healthcare"><span>Healthcare</span></label>
-                            <label class="interest-chip"><input type="checkbox" name="nl-industry" value="Legal"><span>Legal</span></label>
-                        </div>
-                    </div>
-
-                    <div class="newsletter-fields">
-                        <input type="text" id="newsletter-name" name="first_name" placeholder="Your name" required class="newsletter-input" aria-label="Your name">
-                        <input type="email" id="newsletter-email" name="email" placeholder="Work email address" required class="newsletter-input" aria-label="Email address">
-                        <label class="newsletter-field-label" for="newsletter-job-title">Job Title</label>
-                        <input type="text" id="newsletter-job-title" name="job_title" placeholder="e.g. Marketing Manager" required class="newsletter-input" aria-label="Job title">
-                        <label class="newsletter-field-label" for="newsletter-company">Company</label>
-                        <input type="text" id="newsletter-company" name="company" placeholder="Company name" required class="newsletter-input" aria-label="Company name">
-                        <button type="submit" class="newsletter-btn">Get My Alerts</button>
-                    </div>
-                </form>
-
-                <p id="newsletter-message" class="newsletter-message"></p>
-                <p class="newsletter-note">Weekly alerts, personalized to you. Unsubscribe anytime.</p>
+                <h2>Never Miss an Event</h2>
+                <p>Sign up and get curated events by your industry and city interest, delivered every Monday.</p>
+                <div style="display:flex;flex-direction:column;gap:var(--space-sm);max-width:320px;margin:var(--space-lg) auto 0;">
+                    <button class="newsletter-btn" onclick="openLoginModal()">Sign Up</button>
+                    <a href="/usa/submit.html" style="text-align:center;padding:var(--space-sm) var(--space-lg);border:1.5px solid rgba(255,255,255,0.3);border-radius:var(--radius-md);color:var(--white);text-decoration:none;font-weight:600;font-size:var(--font-base);">Create an Event</a>
+                </div>
             </div>
         </div>
     </section>
