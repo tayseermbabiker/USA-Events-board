@@ -4,23 +4,11 @@ let allEvents = [];
 let activeFilters = { month: '', industries: [], cost: '', cities: [] };
 
 function initializeFilters() {
-  // Month filter
-  const monthFilter = document.getElementById('filter-month');
-  if (monthFilter) {
-    getNext6Months().forEach(m => {
-      const opt = document.createElement('option');
-      opt.value = m.value;
-      opt.textContent = m.label;
-      monthFilter.appendChild(opt);
-    });
-    monthFilter.addEventListener('change', (e) => { activeFilters.month = e.target.value; applyFilters(); });
-  }
+  // Month filter (custom single-select dropdown)
+  setupSingleSelect('month', 'month', 'All Months', getNext6Months());
 
-  // Cost filter
-  const costFilter = document.getElementById('filter-cost');
-  if (costFilter) {
-    costFilter.addEventListener('change', (e) => { activeFilters.cost = e.target.value; applyFilters(); });
-  }
+  // Cost filter (custom single-select dropdown)
+  setupSingleSelect('cost', 'cost', 'All Costs');
 
   // Multi-selects
   setupMultiSelect('industry', 'industries', 'All Industries');
@@ -39,6 +27,43 @@ function initializeFilters() {
     if (!e.target.closest('.multi-select')) {
       document.querySelectorAll('.multi-select-dropdown').forEach(d => d.classList.remove('open'));
     }
+  });
+}
+
+function setupSingleSelect(name, filterKey, defaultLabel, options) {
+  const btn = document.getElementById(`${name}-btn`);
+  const dropdown = document.getElementById(`${name}-dropdown`);
+  if (!btn || !dropdown) return;
+
+  // Populate month options dynamically
+  if (options) {
+    options.forEach(opt => {
+      const label = document.createElement('label');
+      const input = document.createElement('input');
+      input.type = 'radio';
+      input.name = `filter-${name}`;
+      input.value = opt.value;
+      label.appendChild(input);
+      label.appendChild(document.createTextNode(' ' + opt.label));
+      dropdown.appendChild(label);
+    });
+  }
+
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    document.querySelectorAll('.multi-select-dropdown').forEach(d => {
+      if (d !== dropdown) d.classList.remove('open');
+    });
+    dropdown.classList.toggle('open');
+  });
+
+  dropdown.querySelectorAll('input[type="radio"]').forEach(radio => {
+    radio.addEventListener('change', () => {
+      activeFilters[filterKey] = radio.value;
+      btn.textContent = radio.value ? radio.parentElement.textContent.trim() + ' ▾' : defaultLabel + ' ▾';
+      dropdown.classList.remove('open');
+      applyFilters();
+    });
   });
 }
 
@@ -89,15 +114,19 @@ function applyFilters() {
 function clearFilters() {
   activeFilters = { month: '', industries: [], cost: '', cities: [] };
 
-  ['filter-month', 'filter-cost'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.value = '';
-  });
+  // Reset single-select radios
+  document.querySelectorAll('.single-select input[type="radio"][value=""]').forEach(r => r.checked = true);
 
-  document.querySelectorAll('.multi-select-dropdown input').forEach(cb => cb.checked = false);
+  // Reset multi-select checkboxes
+  document.querySelectorAll('.multi-select-dropdown input[type="checkbox"]').forEach(cb => cb.checked = false);
 
+  // Reset button labels
+  const monthBtn = document.getElementById('month-btn');
+  const costBtn = document.getElementById('cost-btn');
   const industryBtn = document.getElementById('industry-btn');
   const cityBtn = document.getElementById('city-btn');
+  if (monthBtn) monthBtn.textContent = 'All Months ▾';
+  if (costBtn) costBtn.textContent = 'All Costs ▾';
   if (industryBtn) industryBtn.textContent = 'All Industries ▾';
   if (cityBtn) cityBtn.textContent = 'All Cities ▾';
 

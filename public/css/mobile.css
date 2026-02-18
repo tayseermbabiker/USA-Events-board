@@ -242,11 +242,13 @@ body {
   color: var(--text-primary);
 }
 .multi-select-dropdown label:hover { background: rgba(45,212,191,0.08); }
-.multi-select-dropdown input[type="checkbox"] {
+.multi-select-dropdown input[type="checkbox"],
+.multi-select-dropdown input[type="radio"] {
   width: 16px;
   height: 16px;
   accent-color: var(--primary-teal);
 }
+.multi-select:has(.multi-select-dropdown.open) { z-index: 600; }
 .btn-text {
   background: none;
   border: none;

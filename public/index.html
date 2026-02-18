@@ -67,10 +67,15 @@
         <div class="container">
             <div class="filter-chips">
 
-                <!-- Month Filter -->
-                <select id="filter-month" class="filter-chip" aria-label="Filter by month">
-                    <option value="">All Months</option>
-                </select>
+                <!-- Month Filter (custom dropdown) -->
+                <div class="multi-select" id="month-select">
+                    <button type="button" class="filter-chip multi-select-btn" id="month-btn">
+                        All Months ▾
+                    </button>
+                    <div class="multi-select-dropdown single-select" id="month-dropdown">
+                        <label><input type="radio" name="filter-month" value=""> All Months</label>
+                    </div>
+                </div>
 
                 <!-- Industry Multi-select -->
                 <div class="multi-select" id="industry-select">
@@ -88,12 +93,17 @@
                     </div>
                 </div>
 
-                <!-- Cost Filter -->
-                <select id="filter-cost" class="filter-chip" aria-label="Filter by cost">
-                    <option value="">All Costs</option>
-                    <option value="free">Free</option>
-                    <option value="paid">Paid</option>
-                </select>
+                <!-- Cost Filter (custom dropdown) -->
+                <div class="multi-select" id="cost-select">
+                    <button type="button" class="filter-chip multi-select-btn" id="cost-btn">
+                        All Costs ▾
+                    </button>
+                    <div class="multi-select-dropdown single-select" id="cost-dropdown">
+                        <label><input type="radio" name="filter-cost" value="" checked> All Costs</label>
+                        <label><input type="radio" name="filter-cost" value="free"> Free</label>
+                        <label><input type="radio" name="filter-cost" value="paid"> Paid</label>
+                    </div>
+                </div>
 
                 <!-- City Multi-select -->
                 <div class="multi-select" id="city-select">
