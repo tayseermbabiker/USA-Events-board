@@ -77,43 +77,13 @@ function createEventCard(event) {
   dateItem.innerHTML = `<span class="icon">📅</span><span>${dateText}</span>`;
   meta.appendChild(dateItem);
 
-  // City
-  if (event.city) {
-    const cityItem = document.createElement('div');
-    cityItem.className = 'event-meta-item';
-    cityItem.innerHTML = `<span class="icon">📍</span><span>${escapeHtml(event.city)}</span>`;
-    meta.appendChild(cityItem);
-  }
-
-  // Venue
-  if (event.venue_name) {
-    const venueItem = document.createElement('div');
-    venueItem.className = 'event-meta-item';
-    venueItem.innerHTML = `<span class="icon">🏛️</span><span>${escapeHtml(truncateText(event.venue_name, 40))}</span>`;
-    meta.appendChild(venueItem);
-  }
-
   content.appendChild(meta);
 
-  // Organizer
-  if (event.organizer) {
-    const org = document.createElement('p');
-    org.className = 'event-organizer';
-    org.textContent = 'By ' + event.organizer;
-    content.appendChild(org);
-  }
-
-  // Register button
-  const btn = document.createElement('button');
-  btn.className = 'btn-primary btn-full';
-  btn.textContent = event.is_free ? 'Register Free' : 'Book Now';
-  btn.onclick = (e) => {
-    e.stopPropagation();
-    if (event.registration_url) {
-      window.open(event.registration_url, '_blank', 'noopener,noreferrer');
-    }
-  };
-  content.appendChild(btn);
+  // View details hint
+  const detailsHint = document.createElement('p');
+  detailsHint.className = 'view-details-hint';
+  detailsHint.textContent = 'View details \u2192';
+  content.appendChild(detailsHint);
 
   card.appendChild(content);
   return card;

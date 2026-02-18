@@ -377,7 +377,9 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
-.event-card-content { padding: 20px; }
+.event-card { display: flex; flex-direction: column; }
+.event-card-content { padding: 20px; flex: 1; display: flex; flex-direction: column; }
+.event-card-content .view-details-hint { margin-top: auto; }
 .event-title {
   font-family: var(--font-serif);
   font-size: 20px;
@@ -409,6 +411,14 @@ body {
   font-weight: 600;
   font-size: var(--font-small);
   margin-bottom: var(--space-sm);
+}
+.view-details-hint {
+  color: var(--accent-gold);
+  font-size: 13px;
+  font-weight: 500;
+  text-align: center;
+  margin-bottom: var(--space-sm);
+  cursor: pointer;
 }
 
 /* ===== BUTTONS ===== */
