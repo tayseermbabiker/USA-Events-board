@@ -31,6 +31,19 @@ jobs:
           WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
         run: npm run scrape
 
+      - name: Export events to static JSON
+        env:
+          AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
+          AIRTABLE_BASE_ID: ${{ secrets.AIRTABLE_BASE_ID }}
+        run: node scripts/export-events.js
+
+      - name: Commit and push events.json
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/events.json
+          git diff --staged --quiet || (git commit -m "Update events.json" && git push)
+
       - name: Upload logs
         if: always()
         uses: actions/upload-artifact@v4
