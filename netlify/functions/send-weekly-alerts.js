@@ -117,6 +117,9 @@ exports.handler = async (event) => {
       sort: [{ field: 'start_date', direction: 'asc' }],
     }).all();
 
+    // Prioritize professional sources over general aggregators
+    const SOURCE_PRIORITY = { 'eMedEvents': 1, 'Pri-Med': 1, 'AMS': 1, 'Clio': 1, 'USChamber': 1, 'StartupGrind': 1, 'Luma': 2, 'Eventbrite': 2, 'Meetup': 3 };
+
     const events = allEvents.map(r => ({
       id: r.id,
       title: r.get('title'),
@@ -125,9 +128,15 @@ exports.handler = async (event) => {
       venue_name: r.get('venue_name'),
       city: r.get('city'),
       industry: r.get('industry'),
+      source: r.get('source'),
       is_free: r.get('is_free') || false,
       registration_url: r.get('registration_url'),
-    }));
+    })).sort((a, b) => {
+      const pa = SOURCE_PRIORITY[a.source] || 2;
+      const pb = SOURCE_PRIORITY[b.source] || 2;
+      if (pa !== pb) return pa - pb;
+      return (a.start_date || '').localeCompare(b.start_date || '');
+    });
 
     // 3. Send personalized digest to each subscriber
     let sent = 0, skipped = 0, errors = 0;
@@ -147,10 +156,24 @@ exports.handler = async (event) => {
         const allIndustries = industryList.some(i => i === 'All Industries');
 
         // Filter events for this subscriber
+        const lastAlerted = sub.get('last_alerted_at') || '';
+        const oneWeek = new Date(today);
+        oneWeek.setDate(oneWeek.getDate() + 7);
+        const oneWeekStr = oneWeek.toISOString().split('T')[0];
+
         const matched = events.filter(ev => {
           const cityMatch = allCities || cityList.includes(ev.city);
           const industryMatch = allIndustries || industryList.includes(ev.industry);
-          return cityMatch && industryMatch;
+          if (!cityMatch || !industryMatch) return false;
+          // This week: always include (reminder)
+          if (ev.start_date <= oneWeekStr) return true;
+          // Next week: skip if already in previous alert window
+          if (lastAlerted) {
+            const prevEnd = new Date(lastAlerted);
+            prevEnd.setDate(prevEnd.getDate() + 14);
+            if (ev.start_date <= prevEnd.toISOString().split('T')[0]) return false;
+          }
+          return true;
         });
 
         if (matched.length === 0) {
