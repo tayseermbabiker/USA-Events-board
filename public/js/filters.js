@@ -142,6 +142,7 @@ function updateClearButtonVisibility() {
 }
 
 function setAllEvents(events) {
-  allEvents = events || [];
+  const today = new Date().toISOString().split('T')[0];
+  allEvents = (events || []).filter(e => e.start_date >= today);
   renderEventCards(allEvents);
 }
