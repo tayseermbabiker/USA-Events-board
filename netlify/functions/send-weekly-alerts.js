@@ -58,8 +58,8 @@ function buildDigestEmail(subscriber, events, dateFrom, dateTo) {
         </td></tr>
         <!-- Body -->
         <tr><td style="background:#ffffff;padding:32px 24px;">
-          <p style="margin:0 0 8px;font-size:22px;font-weight:600;color:#0B1426;">Hey ${name}, your events are here!</p>
-          <p style="margin:0 0 24px;font-size:15px;color:#64748b;line-height:1.6;">We found <strong style="color:#0B1426;">${count} event${count !== 1 ? 's' : ''}</strong> that match your preferences for ${fromLabel} — ${toLabel}.</p>
+          <p style="margin:0 0 8px;font-size:22px;font-weight:600;color:#0B1426;">Hey ${name}, plan your week!</p>
+          <p style="margin:0 0 24px;font-size:15px;color:#64748b;line-height:1.6;">We found <strong style="color:#0B1426;">${count} event${count !== 1 ? 's' : ''}</strong> matching your preferences for ${fromLabel} — ${toLabel}.</p>
 
           <table width="100%" cellpadding="0" cellspacing="0">
             ${eventList}
@@ -105,15 +105,17 @@ exports.handler = async (event) => {
       return { statusCode: 200, headers, body: JSON.stringify({ sent: 0, skipped: 0, errors: 0, message: 'No active subscribers' }) };
     }
 
-    // 2. Fetch upcoming events (next 14 days)
+    // 2. Fetch events for the coming week (Mon–Sun)
     const today = new Date();
-    const twoWeeks = new Date(today);
-    twoWeeks.setDate(twoWeeks.getDate() + 14);
-    const todayStr = today.toISOString().split('T')[0];
-    const twoWeeksStr = twoWeeks.toISOString().split('T')[0];
+    const monday = new Date(today);
+    monday.setDate(monday.getDate() + 1);
+    const sunday = new Date(today);
+    sunday.setDate(sunday.getDate() + 7);
+    const mondayStr = monday.toISOString().split('T')[0];
+    const sundayStr = sunday.toISOString().split('T')[0];
 
     const allEvents = await EVENTS.select({
-      filterByFormula: `AND({start_date} >= "${todayStr}", {start_date} <= "${twoWeeksStr}")`,
+      filterByFormula: `AND({start_date} >= "${mondayStr}", {start_date} <= "${sundayStr}")`,
       sort: [{ field: 'start_date', direction: 'asc' }],
     }).all();
 
@@ -155,25 +157,11 @@ exports.handler = async (event) => {
         const allCities = cityList.some(c => c === 'All Cities');
         const allIndustries = industryList.some(i => i === 'All Industries');
 
-        // Filter events for this subscriber
-        const lastAlerted = sub.get('last_alerted_at') || '';
-        const oneWeek = new Date(today);
-        oneWeek.setDate(oneWeek.getDate() + 7);
-        const oneWeekStr = oneWeek.toISOString().split('T')[0];
-
+        // Filter events for this subscriber (city + industry match)
         const matched = events.filter(ev => {
           const cityMatch = allCities || cityList.includes(ev.city);
           const industryMatch = allIndustries || industryList.includes(ev.industry);
-          if (!cityMatch || !industryMatch) return false;
-          // This week: always include (reminder)
-          if (ev.start_date <= oneWeekStr) return true;
-          // Next week: skip if already in previous alert window
-          if (lastAlerted) {
-            const prevEnd = new Date(lastAlerted);
-            prevEnd.setDate(prevEnd.getDate() + 14);
-            if (ev.start_date <= prevEnd.toISOString().split('T')[0]) return false;
-          }
-          return true;
+          return cityMatch && industryMatch;
         });
 
         if (matched.length === 0) {
@@ -184,11 +172,11 @@ exports.handler = async (event) => {
         const html = buildDigestEmail(
           { first_name: firstName, unsubscribe_token: unsubToken },
           matched,
-          todayStr,
-          twoWeeksStr,
+          mondayStr,
+          sundayStr,
         );
 
-        const subject = `Your Weekly Events — ${formatDate(todayStr)} to ${formatDate(twoWeeksStr)}`;
+        const subject = `This Week's Events — ${formatDate(mondayStr)} to ${formatDate(sundayStr)}`;
 
         await resend.emails.send({
           from: 'Conferix USA <alerts@conferix.com>',
@@ -199,7 +187,7 @@ exports.handler = async (event) => {
 
         // Update last_alerted_at
         await SUBSCRIBERS.update(sub.id, {
-          last_alerted_at: todayStr,
+          last_alerted_at: mondayStr,
         });
 
         sent++;
