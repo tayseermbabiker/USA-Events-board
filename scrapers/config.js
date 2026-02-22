@@ -19,7 +19,7 @@ module.exports = {
 
   scrapers: {
     eventbrite:    { enabled: true },
-    meetup:        { enabled: true },
+    meetup:        { enabled: false },
     luma:          { enabled: true },
     emedevents:    { enabled: true },
     primed:        { enabled: true },

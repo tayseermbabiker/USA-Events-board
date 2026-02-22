@@ -5,6 +5,18 @@ const { classifyIndustry } = require('../utils/industry-map');
 
 const MAX_PAGES = 5;
 
+// Skip casual/amateur events that dilute the professional brand
+const SKIP_PATTERNS = [
+  /\bopen mic\b/i, /\bkaraoke\b/i, /\bpub quiz\b/i, /\bbar crawl\b/i,
+  /\bspeed dating\b/i, /\bdating\b/i, /\bsingles\b/i,
+  /\byoga\b/i, /\bpilates\b/i, /\bzumba\b/i, /\bmeditation\b/i,
+  /\bbrunch\b/i, /\bfood tour\b/i, /\bcooking class\b/i,
+  /\bbook club\b/i, /\bpaint\s*(and|&|n)\s*sip\b/i,
+  /\bdesert safari\b/i, /\bcity tour\b/i, /\bboat\s*(party|cruise)\b/i,
+  /\bparty\b/i, /\bnight\s*out\b/i, /\bhappy hour\b/i,
+  /\bkids\b/i, /\bchildren\b/i, /\bfamily fun\b/i,
+];
+
 // Eventbrite search URLs per city
 const CITY_URLS = config.cities.map(city => ({
   city,
@@ -76,7 +88,21 @@ class EventbriteScraper extends BaseScraper {
       }
     }
 
-    return events;
+    // Filter: paid events only + skip casual patterns
+    const filtered = events.filter(ev => {
+      if (ev.is_free) {
+        logger.info(this.name, `Skipping free event: ${ev.title}`);
+        return false;
+      }
+      if (SKIP_PATTERNS.some(p => p.test(ev.title))) {
+        logger.info(this.name, `Skipping casual event: ${ev.title}`);
+        return false;
+      }
+      return true;
+    });
+
+    logger.info(this.name, `${filtered.length} events after filtering (${events.length - filtered.length} removed)`);
+    return filtered;
   }
 
   parseJsonLd(ev) {
