@@ -29,6 +29,9 @@ module.exports = {
     uschamber:          { enabled: true },
     allconferencealert: { enabled: true },
     legalweek:          { enabled: true },
+    digimarcon:         { enabled: true },
+    terrapinnna:        { enabled: true },
+    javits:             { enabled: true },
   },
 
   // Target cities

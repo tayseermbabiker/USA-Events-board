@@ -11,6 +11,11 @@ const AMSScraper = require('./sites/ams');
 const ClioScraper = require('./sites/clio');
 const StartupGrindScraper = require('./sites/startupgrind');
 const USChamberScraper = require('./sites/uschamber');
+const AllConferenceAlertScraper = require('./sites/allconferencealert');
+const LegalWeekScraper = require('./sites/legalweek');
+const DigiMarConScraper = require('./sites/digimarcon');
+const TerrapinnNAScraper = require('./sites/terrapinn-na');
+const JavitsScraper = require('./sites/javits');
 
 const ALL_SCRAPERS = [
   { key: 'eventbrite',    Cls: EventbriteScraper },
@@ -22,6 +27,11 @@ const ALL_SCRAPERS = [
   { key: 'clio',          Cls: ClioScraper },
   { key: 'startupgrind',  Cls: StartupGrindScraper },
   { key: 'uschamber',     Cls: USChamberScraper },
+  { key: 'allconferencealert', Cls: AllConferenceAlertScraper },
+  { key: 'legalweek',          Cls: LegalWeekScraper },
+  { key: 'digimarcon',         Cls: DigiMarConScraper },
+  { key: 'terrapinnna',        Cls: TerrapinnNAScraper },
+  { key: 'javits',             Cls: JavitsScraper },
 ];
 
 async function postBatch(events) {
