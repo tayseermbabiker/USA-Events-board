@@ -16,11 +16,21 @@ function classifyIndustry(text, defaultIndustry = null) {
   if (!text) return defaultIndustry;
   const lower = ` ${text.toLowerCase()} `;
 
-  let best = null;
-  let bestCount = 0;
+  const scores = {};
 
   for (const [industry, keywords] of Object.entries(KEYWORDS)) {
     const count = keywords.filter(kw => lower.includes(kw.toLowerCase())).length;
+    if (count > 0) scores[industry] = count;
+  }
+
+  // AI + Healthcare tiebreak: healthcare professionals are the target audience
+  if (scores.AI && scores.Healthcare) {
+    return 'Healthcare';
+  }
+
+  let best = null;
+  let bestCount = 0;
+  for (const [industry, count] of Object.entries(scores)) {
     if (count > bestCount) {
       bestCount = count;
       best = industry;

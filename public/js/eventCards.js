@@ -1,5 +1,15 @@
 // Event Card Rendering
 
+const AI_KEYWORDS = ['artificial intelligence', ' ai ', 'machine learning', 'deep learning', 'llm',
+  'generative ai', 'chatgpt', 'data science', 'neural', 'nlp', 'computer vision'];
+
+function getSecondaryTags(event) {
+  if (event.industry === 'AI') return [];
+  const text = ` ${(event.title || '')} ${(event.description || '')} `.toLowerCase();
+  const hasAI = AI_KEYWORDS.some(kw => text.includes(kw));
+  return hasAI ? ['AI'] : [];
+}
+
 function addIndustryPlaceholder(wrapper, industry) {
   wrapper.style.background = getIndustryGradient(industry);
   const label = document.createElement('span');
@@ -29,13 +39,28 @@ function createEventCard(event) {
     addIndustryPlaceholder(imageWrapper, event.industry);
   }
 
-  // Industry badge
-  if (event.industry) {
-    const badge = document.createElement('span');
-    badge.className = 'category-badge';
-    badge.textContent = event.industry;
-    badge.style.borderLeft = `3px solid ${getIndustryColor(event.industry)}`;
-    imageWrapper.appendChild(badge);
+  // Badge row (industry + secondary tags)
+  const secondaryTags = getSecondaryTags(event);
+  if (event.industry || secondaryTags.length > 0) {
+    const badgeRow = document.createElement('div');
+    badgeRow.className = 'badge-row';
+
+    if (event.industry) {
+      const badge = document.createElement('span');
+      badge.className = 'category-badge';
+      badge.textContent = event.industry;
+      badge.style.borderLeft = `3px solid ${getIndustryColor(event.industry)}`;
+      badgeRow.appendChild(badge);
+    }
+
+    secondaryTags.forEach(tag => {
+      const pill = document.createElement('span');
+      pill.className = 'secondary-tag';
+      pill.textContent = tag;
+      badgeRow.appendChild(pill);
+    });
+
+    imageWrapper.appendChild(badgeRow);
   }
 
   // Cost badge

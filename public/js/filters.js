@@ -99,7 +99,15 @@ function applyFilters() {
     filtered = filtered.filter(e => e.start_date && e.start_date.substring(0, 7) === activeFilters.month);
   }
   if (activeFilters.industries.length > 0) {
-    filtered = filtered.filter(e => activeFilters.industries.includes(e.industry));
+    filtered = filtered.filter(e => {
+      if (activeFilters.industries.includes(e.industry)) return true;
+      // Include events with matching secondary tags (e.g. AI tag on Healthcare events)
+      if (typeof getSecondaryTags === 'function') {
+        const tags = getSecondaryTags(e);
+        if (tags.some(t => activeFilters.industries.includes(t))) return true;
+      }
+      return false;
+    });
   }
   if (activeFilters.cost) {
     filtered = filtered.filter(e => activeFilters.cost === 'free' ? e.is_free === true : e.is_free === false);
