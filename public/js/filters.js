@@ -1,14 +1,11 @@
 // Filters Logic
 
 let allEvents = [];
-let activeFilters = { month: '', industries: [], cost: '', cities: [] };
+let activeFilters = { month: '', industries: [], cities: [] };
 
 function initializeFilters() {
   // Month filter (custom single-select dropdown)
   setupSingleSelect('month', 'month', 'All Months', getNext6Months());
-
-  // Cost filter (custom single-select dropdown)
-  setupSingleSelect('cost', 'cost', 'All Costs');
 
   // Multi-selects
   setupMultiSelect('industry', 'industries', 'All Industries');
@@ -109,9 +106,6 @@ function applyFilters() {
       return false;
     });
   }
-  if (activeFilters.cost) {
-    filtered = filtered.filter(e => activeFilters.cost === 'free' ? e.is_free === true : e.is_free === false);
-  }
   if (activeFilters.cities.length > 0) {
     filtered = filtered.filter(e => activeFilters.cities.includes(e.city));
   }
@@ -120,7 +114,7 @@ function applyFilters() {
 }
 
 function clearFilters() {
-  activeFilters = { month: '', industries: [], cost: '', cities: [] };
+  activeFilters = { month: '', industries: [], cities: [] };
 
   // Reset single-select radios
   document.querySelectorAll('.single-select input[type="radio"][value=""]').forEach(r => r.checked = true);
@@ -130,11 +124,9 @@ function clearFilters() {
 
   // Reset button labels
   const monthBtn = document.getElementById('month-btn');
-  const costBtn = document.getElementById('cost-btn');
   const industryBtn = document.getElementById('industry-btn');
   const cityBtn = document.getElementById('city-btn');
   if (monthBtn) monthBtn.textContent = 'All Months ▾';
-  if (costBtn) costBtn.textContent = 'All Costs ▾';
   if (industryBtn) industryBtn.textContent = 'All Industries ▾';
   if (cityBtn) cityBtn.textContent = 'All Cities ▾';
 
@@ -145,7 +137,7 @@ function clearFilters() {
 function updateClearButtonVisibility() {
   const btn = document.getElementById('clear-filters');
   if (!btn) return;
-  const active = activeFilters.month || activeFilters.industries.length > 0 || activeFilters.cost || activeFilters.cities.length > 0;
+  const active = activeFilters.month || activeFilters.industries.length > 0 || activeFilters.cities.length > 0;
   btn.style.display = active ? 'inline-block' : 'none';
 }
 

@@ -63,12 +63,6 @@ function createEventCard(event) {
     imageWrapper.appendChild(badgeRow);
   }
 
-  // Cost badge
-  const costBadge = document.createElement('span');
-  costBadge.className = 'cost-badge';
-  costBadge.textContent = event.is_free ? 'FREE' : 'PAID';
-  if (event.is_free) costBadge.style.background = '#2DD4BF';
-  imageWrapper.appendChild(costBadge);
 
   // Source badge
   if (event.source) {
