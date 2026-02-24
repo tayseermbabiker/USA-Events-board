@@ -367,20 +367,6 @@ body {
   letter-spacing: 0.5px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
-.source-badge {
-  position: absolute;
-  bottom: var(--space-sm);
-  left: var(--space-sm);
-  background: rgba(0,0,0,0.6);
-  color: var(--white);
-  padding: var(--space-xs) var(--space-sm);
-  border-radius: var(--radius-sm);
-  font-size: 10px;
-  font-weight: 600;
-  z-index: 2;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
 .event-card { display: flex; flex-direction: column; }
 .event-card-content { padding: 20px; flex: 1; display: flex; flex-direction: column; }
 .event-card-content .view-details-hint { margin-top: auto; }

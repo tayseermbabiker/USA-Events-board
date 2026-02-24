@@ -63,15 +63,6 @@ function createEventCard(event) {
     imageWrapper.appendChild(badgeRow);
   }
 
-
-  // Source badge
-  if (event.source) {
-    const srcBadge = document.createElement('span');
-    srcBadge.className = 'source-badge';
-    srcBadge.textContent = event.source;
-    imageWrapper.appendChild(srcBadge);
-  }
-
   card.appendChild(imageWrapper);
 
   // Content
