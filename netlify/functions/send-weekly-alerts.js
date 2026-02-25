@@ -21,10 +21,30 @@ function formatDateRange(start, end) {
   return `${s} — ${formatDate(end)}`;
 }
 
-function buildDigestEmail(subscriber, events, dateFrom, dateTo) {
+function buildEarlyBirdSection(earlyBirdEvents) {
+  if (!earlyBirdEvents || earlyBirdEvents.length === 0) return '';
+  const rows = earlyBirdEvents.slice(0, 5).map(ev => {
+    const goUrl = `${SITE_URL}/.netlify/functions/go?id=${ev.id}`;
+    const title = ev.registration_url
+      ? `<a href="${goUrl}" style="color:#1E3A5F;text-decoration:none;font-weight:600;">${ev.title}</a>`
+      : `<strong>${ev.title}</strong>`;
+    const shortDate = formatDate(ev.start_date);
+    const city = ev.city ? `, ${ev.city}` : '';
+    const deadline = formatDate(ev.early_bird_deadline);
+    return `<tr><td style="padding:6px 0;font-size:14px;color:#0B1426;line-height:1.5;">${title} — <span style="color:#64748b;">${shortDate}${city}</span><br><span style="color:#D4A853;font-size:12px;font-weight:600;">Early bird ends ${deadline}</span></td></tr>`;
+  }).join('');
+  return `
+          <table width="100%" cellpadding="0" cellspacing="0" style="margin-top:24px;border-top:2px solid #D4A853;padding-top:20px;">
+            <tr><td style="padding:0 0 12px;font-size:18px;font-weight:700;color:#D4A853;">Early Bird Ending Soon</td></tr>
+            ${rows}
+          </table>`;
+}
+
+function buildDigestEmail(subscriber, events, dateFrom, dateTo, earlyBirdEvents) {
   const name = subscriber.first_name || 'there';
   const unsubUrl = `${SITE_URL}/unsubscribe.html?token=${subscriber.unsubscribe_token}`;
   const count = events.length;
+  const earlyBirdHtml = buildEarlyBirdSection(earlyBirdEvents);
 
   const fromLabel = formatDate(dateFrom);
   const toLabel = formatDate(dateTo);
@@ -65,6 +85,7 @@ function buildDigestEmail(subscriber, events, dateFrom, dateTo) {
             ${eventList}
           </table>
           ${moreNote}
+          ${earlyBirdHtml}
 
           <table cellpadding="0" cellspacing="0" width="100%" style="margin-top:24px;">
             <tr><td align="center">
@@ -140,6 +161,28 @@ exports.handler = async (event) => {
       return (a.start_date || '').localeCompare(b.start_date || '');
     });
 
+    // 2b. Fetch early bird events (deadline within 14 days, event beyond weekly window)
+    const todayStr = today.toISOString().split('T')[0];
+    const plus14 = new Date(today);
+    plus14.setDate(plus14.getDate() + 14);
+    const plus14Str = plus14.toISOString().split('T')[0];
+
+    const allEarlyBird = await EVENTS.select({
+      filterByFormula: `AND({early_bird_deadline} >= "${todayStr}", {early_bird_deadline} <= "${plus14Str}", {start_date} > "${sundayStr}")`,
+      sort: [{ field: 'early_bird_deadline', direction: 'asc' }],
+    }).all();
+
+    const earlyBirdEvents = allEarlyBird.map(r => ({
+      id: r.id,
+      title: r.get('title'),
+      start_date: r.get('start_date'),
+      end_date: r.get('end_date'),
+      city: r.get('city'),
+      industry: r.get('industry'),
+      registration_url: r.get('registration_url'),
+      early_bird_deadline: r.get('early_bird_deadline'),
+    }));
+
     // 3. Send personalized digest to each subscriber
     let sent = 0, skipped = 0, errors = 0;
 
@@ -164,7 +207,13 @@ exports.handler = async (event) => {
           return cityMatch && industryMatch;
         });
 
-        if (matched.length === 0) {
+        const earlyBirdMatched = earlyBirdEvents.filter(ev => {
+          const cityMatch = allCities || cityList.includes(ev.city);
+          const industryMatch = allIndustries || industryList.includes(ev.industry);
+          return cityMatch && industryMatch;
+        });
+
+        if (matched.length === 0 && earlyBirdMatched.length === 0) {
           skipped++;
           continue;
         }
@@ -174,6 +223,7 @@ exports.handler = async (event) => {
           matched,
           mondayStr,
           sundayStr,
+          earlyBirdMatched,
         );
 
         const subject = `This Week's USA Events — ${formatDate(mondayStr)} to ${formatDate(sundayStr)}`;
@@ -200,7 +250,7 @@ exports.handler = async (event) => {
     return {
       statusCode: 200,
       headers,
-      body: JSON.stringify({ sent, skipped, errors, totalEvents: events.length, totalSubscribers: subscribers.length }),
+      body: JSON.stringify({ sent, skipped, errors, totalEvents: events.length, earlyBirdEvents: earlyBirdEvents.length, totalSubscribers: subscribers.length }),
     };
 
   } catch (err) {
