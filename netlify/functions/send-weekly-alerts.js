@@ -229,36 +229,44 @@ exports.handler = async (event) => {
       sendTasks.push({ sub, email, html });
     }
 
-    // Send emails in batches of 100 via Resend batch API
+    // Send emails via Resend batch API (up to 100 per call)
+    const successIds = [];
     for (let i = 0; i < sendTasks.length; i += 100) {
       const batch = sendTasks.slice(i, i + 100);
-      const results = await Promise.allSettled(
-        batch.map(({ email, html }) =>
-          resend.emails.send({
-            from: 'Conferix USA <alerts@conferix.com>',
-            to: email,
-            subject,
-            html,
-          })
-        )
-      );
+      const batchPayload = batch.map(({ email, html }) => ({
+        from: 'Conferix USA <alerts@conferix.com>',
+        to: email,
+        subject,
+        html,
+      }));
 
-      const batchSuccessIds = [];
-      results.forEach((result, j) => {
-        if (result.status === 'fulfilled') {
-          sent++;
-          batchSuccessIds.push(batch[j].sub.id);
+      try {
+        const { data, error } = await resend.batch.send(batchPayload);
+        if (error) {
+          console.error('Batch send error:', error);
+          errors += batch.length;
         } else {
-          console.error(`Failed to send to ${batch[j].email}:`, result.reason?.message);
-          errors++;
+          const results = data?.data || [];
+          results.forEach((result, j) => {
+            if (result.id) {
+              sent++;
+              successIds.push(batch[j].sub.id);
+            } else {
+              console.error(`No ID returned for ${batch[j].email}`);
+              errors++;
+            }
+          });
         }
-      });
-
-      // Batch-update last_alerted_at only for confirmed sends (max 10 per Airtable call)
-      for (let k = 0; k < batchSuccessIds.length; k += 10) {
-        const updateBatch = batchSuccessIds.slice(k, k + 10);
-        await SUBSCRIBERS.update(updateBatch.map(id => ({ id, fields: { last_alerted_at: mondayStr } })));
+      } catch (err) {
+        console.error('Batch send exception:', err.message);
+        errors += batch.length;
       }
+    }
+
+    // Batch-update last_alerted_at only for confirmed sends (max 10 per Airtable call)
+    for (let k = 0; k < successIds.length; k += 10) {
+      const updateBatch = successIds.slice(k, k + 10);
+      await SUBSCRIBERS.update(updateBatch.map(id => ({ id, fields: { last_alerted_at: mondayStr } })));
     }
 
     return {
