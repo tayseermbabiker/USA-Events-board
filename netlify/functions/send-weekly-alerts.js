@@ -185,65 +185,79 @@ exports.handler = async (event) => {
 
     // 3. Send personalized digest to each subscriber
     let sent = 0, skipped = 0, errors = 0;
+    const subject = `This Week's USA Events — ${formatDate(mondayStr)} to ${formatDate(sundayStr)}`;
 
+    // Build send tasks for all matching subscribers
+    const sendTasks = [];
     for (const sub of subscribers) {
-      try {
-        const email = sub.get('email');
-        const firstName = sub.get('first_name') || '';
-        const citiesPref = sub.get('cities') || 'All Cities';
-        const industriesPref = sub.get('industries') || 'All Industries';
-        const unsubToken = sub.get('unsubscribe_token') || '';
+      const email = sub.get('email');
+      const firstName = sub.get('first_name') || '';
+      const citiesPref = sub.get('cities') || 'All Cities';
+      const industriesPref = sub.get('industries') || 'All Industries';
+      const unsubToken = sub.get('unsubscribe_token') || '';
 
-        // Parse preferences
-        const cityList = citiesPref.split(',').map(s => s.trim()).filter(Boolean);
-        const industryList = industriesPref.split(',').map(s => s.trim()).filter(Boolean);
-        const allCities = cityList.some(c => c === 'All Cities');
-        const allIndustries = industryList.some(i => i === 'All Industries');
+      const cityList = citiesPref.split(',').map(s => s.trim()).filter(Boolean);
+      const industryList = industriesPref.split(',').map(s => s.trim()).filter(Boolean);
+      const allCities = cityList.some(c => c === 'All Cities');
+      const allIndustries = industryList.some(i => i === 'All Industries');
 
-        // Filter events for this subscriber (city + industry match)
-        const matched = events.filter(ev => {
-          const cityMatch = allCities || cityList.includes(ev.city);
-          const industryMatch = allIndustries || industryList.includes(ev.industry);
-          return cityMatch && industryMatch;
-        });
+      const matched = events.filter(ev => {
+        const cityMatch = allCities || cityList.includes(ev.city);
+        const industryMatch = allIndustries || industryList.includes(ev.industry);
+        return cityMatch && industryMatch;
+      });
 
-        const earlyBirdMatched = earlyBirdEvents.filter(ev => {
-          const cityMatch = allCities || cityList.includes(ev.city);
-          const industryMatch = allIndustries || industryList.includes(ev.industry);
-          return cityMatch && industryMatch;
-        });
+      const earlyBirdMatched = earlyBirdEvents.filter(ev => {
+        const cityMatch = allCities || cityList.includes(ev.city);
+        const industryMatch = allIndustries || industryList.includes(ev.industry);
+        return cityMatch && industryMatch;
+      });
 
-        if (matched.length === 0 && earlyBirdMatched.length === 0) {
-          skipped++;
-          continue;
+      if (matched.length === 0 && earlyBirdMatched.length === 0) {
+        skipped++;
+        continue;
+      }
+
+      const html = buildDigestEmail(
+        { first_name: firstName, unsubscribe_token: unsubToken },
+        matched,
+        mondayStr,
+        sundayStr,
+        earlyBirdMatched,
+      );
+
+      sendTasks.push({ sub, email, html });
+    }
+
+    // Send emails in batches of 100 via Resend batch API
+    for (let i = 0; i < sendTasks.length; i += 100) {
+      const batch = sendTasks.slice(i, i + 100);
+      const results = await Promise.allSettled(
+        batch.map(({ email, html }) =>
+          resend.emails.send({
+            from: 'Conferix USA <alerts@conferix.com>',
+            to: email,
+            subject,
+            html,
+          })
+        )
+      );
+
+      const batchSuccessIds = [];
+      results.forEach((result, j) => {
+        if (result.status === 'fulfilled') {
+          sent++;
+          batchSuccessIds.push(batch[j].sub.id);
+        } else {
+          console.error(`Failed to send to ${batch[j].email}:`, result.reason?.message);
+          errors++;
         }
+      });
 
-        const html = buildDigestEmail(
-          { first_name: firstName, unsubscribe_token: unsubToken },
-          matched,
-          mondayStr,
-          sundayStr,
-          earlyBirdMatched,
-        );
-
-        const subject = `This Week's USA Events — ${formatDate(mondayStr)} to ${formatDate(sundayStr)}`;
-
-        await resend.emails.send({
-          from: 'Conferix USA <alerts@conferix.com>',
-          to: email,
-          subject,
-          html,
-        });
-
-        // Update last_alerted_at
-        await SUBSCRIBERS.update(sub.id, {
-          last_alerted_at: mondayStr,
-        });
-
-        sent++;
-      } catch (err) {
-        console.error(`Failed to send to ${sub.get('email')}:`, err.message);
-        errors++;
+      // Batch-update last_alerted_at only for confirmed sends (max 10 per Airtable call)
+      for (let k = 0; k < batchSuccessIds.length; k += 10) {
+        const updateBatch = batchSuccessIds.slice(k, k + 10);
+        await SUBSCRIBERS.update(updateBatch.map(id => ({ id, fields: { last_alerted_at: mondayStr } })));
       }
     }
 
