@@ -2,7 +2,7 @@ name: Send Weekly Alerts
 
 on:
   schedule:
-    - cron: '0 8 * * 0'  # Every Sunday 8AM UTC
+    - cron: '0 8 * * 6'  # Every Saturday 8AM UTC
   workflow_dispatch:       # Manual trigger for testing
 
 jobs:
