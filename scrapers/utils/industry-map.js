@@ -1,11 +1,11 @@
 const KEYWORDS = {
   Technology:  ['tech', 'software', 'developer', 'devops', 'cloud', 'cyber', 'iot', 'blockchain', 'saas', 'digital transformation', 'computing', 'web3', 'engineering', 'code', 'programming', 'hackathon', 'open source'],
   AI:          ['artificial intelligence', ' ai ', 'machine learning', 'deep learning', 'llm', 'generative ai', 'chatgpt', 'data science', 'neural', 'nlp', 'computer vision', 'prompt engineering', 'langchain', 'rag '],
-  Startup:     ['startup', 'start-up', 'venture', 'entrepreneurship', 'incubator', 'accelerator', 'founder', 'pitch', 'demo day', 'seed', 'series a', 'bootstrapp', 'yc ', 'y combinator', 'indie hacker'],
+  Startup:     ['startup', 'start-up', 'venture', 'entrepreneurship', 'incubator', 'accelerator', 'founder', 'pitch', 'demo day', 'seed', 'series a', 'bootstrapp', 'yc ', 'y combinator', 'indie hacker', 'business setup', 'business formation', 'incorporation', 'llc', 's-corp', 's corp', 'sole proprietor', 'small business'],
   Finance:     ['finance', 'fintech', 'banking', 'investment', 'wealth', 'capital', 'trading', 'insurance', 'fund', 'asset management', 'crypto', 'defi', 'payments', 'lending', 'wall street'],
-  Marketing:   ['marketing', 'advertising', 'brand', 'social media', 'seo', 'content', 'pr ', 'public relations', 'growth', 'demand gen', 'b2b marketing', 'product marketing', 'copywriting', 'analytics'],
+  Marketing:   ['marketing', 'advertising', 'brand strategy', 'branding', 'social media', 'seo', 'content marketing', 'content strategy', 'pr ', 'public relations', 'growth marketing', 'growth hacking', 'demand gen', 'b2b marketing', 'product marketing', 'copywriting', 'marketing analytics'],
   Healthcare:  ['medical', 'healthcare', 'health care', 'clinical', 'physician', 'nursing', 'nurse', 'pharma', 'cme', 'continuing medical', 'hospital', 'patient', 'cardiology', 'oncology', 'pediatric', 'orthopedic', 'dermatology', 'radiology', 'surgery', 'dental', 'mental health', 'therapy', 'biotech', 'medtech', 'telemedicine', 'primary care', 'internal medicine', 'emergency medicine', 'public health', 'epidemiology'],
-  Legal:       ['legal', 'law ', 'lawyer', 'attorney', 'litigation', 'compliance', 'regulatory', 'contract', 'intellectual property', 'patent', 'trademark', 'legal tech', 'legaltech', 'paralegal', 'bar association', 'court', 'arbitration', 'mediation', 'corporate counsel', 'in-house counsel', 'cle ', 'continuing legal'],
+  Legal:       ['legal', 'law ', 'lawyer', 'attorney', 'litigation', 'compliance', 'regulatory', 'contract', 'intellectual property', 'patent', 'trademark', 'legal tech', 'legaltech', 'paralegal', 'bar association', 'court', 'arbitration', 'mediation', 'corporate counsel', 'in-house counsel', 'cle ', 'continuing legal', 'entity structure', 'business entity'],
 };
 
 /**
