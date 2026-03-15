@@ -19,6 +19,10 @@ const SKIP_PATTERNS = [
   /\bflea market\b/i, /\bantique\b/i, /\bcraft fair\b/i,
   /\bconcert\b/i, /\bmusic fest\b/i,
   /\btattoo\b/i, /\bfitness\b/i,
+  /\bpoker\b/i, /\bgolf\s*(tournament|outing|classic)\b/i, /\bgo-?kart/i,
+  /\bbowling\b/i, /\btrivia\b/i, /\bwine\s*tasting\b/i, /\bbeer\s*tasting\b/i,
+  /\bgala\b/i, /\bawards\s*dinner\b/i, /\bholiday\s*party\b/i,
+  /\bpadel\b/i, /\beuchre\b/i, /\bcasino\s*night\b/i,
 ];
 
 class BaseScraper {
