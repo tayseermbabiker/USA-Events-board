@@ -32,6 +32,11 @@ module.exports = {
     digimarcon:         { enabled: true },
     terrapinnna:        { enabled: true },
     javits:             { enabled: true },
+    fia:                { enabled: true },
+    pionline:           { enabled: true },
+    milken:             { enabled: true },
+    acg:                { enabled: true },
+    familyoffice:       { enabled: true },
   },
 
   // Target cities
