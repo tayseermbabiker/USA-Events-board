@@ -17,11 +17,13 @@ const SKIP_PATTERNS = [
   /\bkids\b/i, /\bchildren\b/i, /\bfamily fun\b/i,
 ];
 
-// Eventbrite search URLs per city
-const CITY_URLS = config.cities.map(city => ({
-  city,
-  url: `https://www.eventbrite.com/d/${city.toLowerCase().replace(/\s+/g, '-')}/business--events/`,
-}));
+// Eventbrite search URLs per city (new /b/ format with state prefix)
+const CITY_URLS = [
+  { city: 'Austin', url: 'https://www.eventbrite.com/b/tx--austin/business/' },
+  { city: 'San Francisco', url: 'https://www.eventbrite.com/b/ca--san-francisco/business/' },
+  { city: 'New York', url: 'https://www.eventbrite.com/b/ny--new-york/business/' },
+  { city: 'Miami', url: 'https://www.eventbrite.com/b/fl--miami/business/' },
+];
 
 class EventbriteScraper extends BaseScraper {
   constructor() {
@@ -122,7 +124,7 @@ class EventbriteScraper extends BaseScraper {
       city,
       organizer: ev.organizer?.name || location.name || null,
       industry: classifyIndustry(`${ev.name} ${ev.description || ''}`),
-      is_free: ev.isAccessibleForFree === true || (ev.offers && ev.offers.price === 0) || /free/i.test(`${ev.name} ${ev.description || ''}`),
+      is_free: ev.isAccessibleForFree === true || (ev.offers && (ev.offers.price === 0 || ev.offers.price === '0')),
       registration_url: ev.url,
       image_url: typeof ev.image === 'string' ? ev.image : ev.image?.url || null,
       source: 'Eventbrite',
