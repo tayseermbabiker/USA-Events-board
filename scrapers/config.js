@@ -37,6 +37,8 @@ module.exports = {
     milken:             { enabled: true },
     acg:                { enabled: true },
     familyoffice:       { enabled: true },
+    fintechweekly:      { enabled: true },
+    ana:                { enabled: true },
   },
 
   // Target cities

@@ -21,6 +21,8 @@ const PionlineScraper = require('./sites/pionline');
 const MilkenScraper = require('./sites/milken');
 const ACGScraper = require('./sites/acg');
 const FamilyOfficeScraper = require('./sites/familyoffice');
+const FintechWeeklyScraper = require('./sites/fintechweekly');
+const ANAScraper = require('./sites/ana');
 
 const ALL_SCRAPERS = [
   { key: 'eventbrite',    Cls: EventbriteScraper },
@@ -42,6 +44,8 @@ const ALL_SCRAPERS = [
   { key: 'milken',             Cls: MilkenScraper },
   { key: 'acg',                Cls: ACGScraper },
   { key: 'familyoffice',       Cls: FamilyOfficeScraper },
+  { key: 'fintechweekly',      Cls: FintechWeeklyScraper },
+  { key: 'ana',                Cls: ANAScraper },
 ];
 
 async function postBatch(events) {
