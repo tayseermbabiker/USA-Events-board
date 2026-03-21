@@ -21,7 +21,7 @@ module.exports = {
     eventbrite:    { enabled: false },
     meetup:        { enabled: false },
     luma:          { enabled: false },
-    emedevents:    { enabled: true },
+    emedevents:    { enabled: false },
     primed:        { enabled: true },
     ams:           { enabled: true },
     clio:          { enabled: true },
