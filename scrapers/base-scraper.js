@@ -5,7 +5,7 @@ const { parseDate } = require('./utils/date-parser');
 
 // Global blocklist — casual/social events that dilute the professional brand
 const SKIP_PATTERNS = [
-  /\bhappy hour\b/i, /\bnetworking mixer\b/i, /\bcocktail\b/i, /\bwine down\b/i,
+  /\bhappy hour\b/i, /\bmixer\b/i, /\bcocktail\b/i, /\bwine down\b/i,
   /\bopen mic\b/i, /\bkaraoke\b/i, /\bpub quiz\b/i, /\bbar crawl\b/i,
   /\bspeed dating\b/i, /\bdating\b/i, /\bsingles\b/i,
   /\byoga\b/i, /\bpilates\b/i, /\bzumba\b/i, /\bmeditation retreat\b/i,
