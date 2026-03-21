@@ -44,7 +44,8 @@
   .events-grid { grid-template-columns: repeat(3, 1fr); gap: 28px; }
   .event-card:hover {
     transform: translateY(-6px);
-    box-shadow: 0 20px 40px rgba(11,20,38,0.15), 0 8px 16px rgba(30,58,95,0.1);
+    border-color: rgba(212,168,83,0.3);
+    box-shadow: 0 20px 40px rgba(11,20,38,0.12), 0 0 20px rgba(212,168,83,0.1);
   }
   .btn-primary:hover {
     background: var(--charcoal);
