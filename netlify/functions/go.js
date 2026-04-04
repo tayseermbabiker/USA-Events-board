@@ -78,9 +78,19 @@ function buildEventPage(ev, related) {
     "name": "${title.replace(/"/g, '\\"')}",
     "startDate": "${ev.start_date || ''}",
     ${ev.end_date ? `"endDate": "${ev.end_date}",` : ''}
-    "description": "${desc.substring(0, 300).replace(/"/g, '\\"').replace(/\n/g, ' ')}",
-    ${venue ? `"location": { "@type": "Place", "name": "${venue.replace(/"/g, '\\"')}", "address": "${(address || city).replace(/"/g, '\\"')}" },` : ''}
-    ${organizer ? `"organizer": { "@type": "Organization", "name": "${organizer.replace(/"/g, '\\"')}" },` : ''}
+    "description": "${(desc || title).substring(0, 300).replace(/"/g, '\\"').replace(/\n/g, ' ')}",
+    "eventStatus": "https://schema.org/EventScheduled",
+    "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+    ${venue ? `"location": { "@type": "Place", "name": "${venue.replace(/"/g, '\\"')}", "address": { "@type": "PostalAddress", "name": "${(address || city).replace(/"/g, '\\"')}" } },` : ''}
+    ${organizer ? `"organizer": { "@type": "Organization", "name": "${organizer.replace(/"/g, '\\"')}"${regUrl ? `, "url": "${regUrl}"` : ''} },` : ''}
+    ${organizer ? `"performer": { "@type": "Organization", "name": "${organizer.replace(/"/g, '\\"')}" },` : ''}
+    "offers": {
+      "@type": "Offer",
+      "price": "${ev.is_free ? '0' : ''}",
+      "priceCurrency": "USD",
+      "availability": "https://schema.org/InStock",
+      "validFrom": "${ev.start_date || ''}"${regUrl ? `,\n      "url": "${regUrl}"` : ''}
+    },
     "isAccessibleForFree": ${ev.is_free ? 'true' : 'false'}
   }
   </script>
