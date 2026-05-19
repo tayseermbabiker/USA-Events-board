@@ -2,10 +2,67 @@
 // Optimized to minimize Airtable API calls:
 //   - Bulk dedup by chunked OR formula (~1 list per 50 events)
 //   - Batched creates and updates (10 records per call)
+//   - LLM (Claude Haiku) classifies events with missing/invalid industry
 const Airtable = require('airtable');
+const Anthropic = require('@anthropic-ai/sdk');
+
+const VALID_CATEGORIES = [
+  'Technology', 'AI', 'Startup', 'Finance',
+  'Marketing', 'Healthcare', 'Legal', 'General',
+];
 
 const toDate = (val) => (val ? val.split('T')[0] : null);
 const safeQuote = (s) => String(s).replace(/"/g, '\\"');
+
+// Classify events whose industry is missing or not in the valid set.
+async function classifyMissing(records) {
+  const candidates = records.filter(r => {
+    const ind = r.fields.industry;
+    return (!ind || !VALID_CATEGORIES.includes(ind)) &&
+      r.fields.title &&
+      (r.fields.title.length + (r.fields.description || '').length) > 20;
+  });
+  if (candidates.length === 0) return;
+  if (!process.env.ANTHROPIC_API_KEY) {
+    console.log('ANTHROPIC_API_KEY not set — skipping LLM classification');
+    return;
+  }
+
+  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+  const list = candidates
+    .map((r, i) => `${i + 1}. ${r.fields.title} — ${(r.fields.description || '').slice(0, 250)}`)
+    .join('\n');
+
+  const prompt = `Classify each of these US professional events into EXACTLY one of these categories:
+${VALID_CATEGORIES.join(', ')}
+
+Return ONLY a JSON array of category strings, in the same order as the input. No explanation, no prose.
+
+Events:
+${list}`;
+
+  try {
+    const resp = await client.messages.create({
+      model: 'claude-haiku-4-5',
+      max_tokens: 60 * candidates.length + 100,
+      messages: [{ role: 'user', content: prompt }],
+    });
+    const text = resp.content[0].text.trim();
+    const cleaned = text.replace(/^```(?:json)?\s*|\s*```$/g, '');
+    const categories = JSON.parse(cleaned);
+    if (!Array.isArray(categories)) throw new Error('Expected array');
+
+    candidates.forEach((r, i) => {
+      const cat = categories[i];
+      if (cat && VALID_CATEGORIES.includes(cat)) {
+        r.fields.industry = cat;
+      }
+    });
+    console.log(`Classified ${candidates.length} events via Haiku`);
+  } catch (err) {
+    console.error('LLM classify failed (events keep original industry):', err.message);
+  }
+}
 
 exports.handler = async (event) => {
   const headers = {
@@ -88,6 +145,9 @@ exports.handler = async (event) => {
         toCreate.push({ fields: record });
       }
     }
+
+    // === LLM classification before writes ===
+    await classifyMissing([...toCreate, ...toUpdate]);
 
     // === Batched writes ===
     for (let i = 0; i < toCreate.length; i += 10) {

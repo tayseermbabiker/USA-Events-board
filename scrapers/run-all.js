@@ -1,5 +1,6 @@
 const config = require('./config');
 const logger = require('./utils/logger');
+const pLimit = require('p-limit');
 
 // Import all scrapers
 const EventbriteScraper = require('./sites/eventbrite');
@@ -25,15 +26,15 @@ const FintechWeeklyScraper = require('./sites/fintechweekly');
 const ANAScraper = require('./sites/ana');
 
 const ALL_SCRAPERS = [
-  { key: 'eventbrite',    Cls: EventbriteScraper },
-  { key: 'meetup',        Cls: MeetupScraper },
-  { key: 'luma',          Cls: LumaScraper },
-  { key: 'emedevents',    Cls: EMedEventsScraper },
-  { key: 'primed',        Cls: PriMedScraper },
-  { key: 'ams',           Cls: AMSScraper },
-  { key: 'clio',          Cls: ClioScraper },
-  { key: 'startupgrind',  Cls: StartupGrindScraper },
-  { key: 'uschamber',     Cls: USChamberScraper },
+  { key: 'eventbrite',         Cls: EventbriteScraper },
+  { key: 'meetup',             Cls: MeetupScraper },
+  { key: 'luma',               Cls: LumaScraper },
+  { key: 'emedevents',         Cls: EMedEventsScraper },
+  { key: 'primed',             Cls: PriMedScraper },
+  { key: 'ams',                Cls: AMSScraper },
+  { key: 'clio',               Cls: ClioScraper },
+  { key: 'startupgrind',       Cls: StartupGrindScraper },
+  { key: 'uschamber',          Cls: USChamberScraper },
   { key: 'allconferencealert', Cls: AllConferenceAlertScraper },
   { key: 'legalweek',          Cls: LegalWeekScraper },
   { key: 'digimarcon',         Cls: DigiMarConScraper },
@@ -48,9 +49,11 @@ const ALL_SCRAPERS = [
   { key: 'ana',                Cls: ANAScraper },
 ];
 
+const CONCURRENCY = 4;
+
 async function postBatch(events) {
   const url = config.webhookUrl;
-  logger.info('Runner', `POSTing batch of ${events.length} events to ${url}`);
+  logger.info('Runner', `POSTing batch of ${events.length} events to webhook`);
 
   const res = await fetch(url, {
     method: 'POST',
@@ -72,30 +75,46 @@ async function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-async function main() {
-  const startTime = Date.now();
-  logger.info('Runner', '=== USA Scrape run started ===');
+// Scrape a single source, isolated so a failure can't take down the run
+async function runSource({ key, Cls }) {
+  if (!config.scrapers[key]?.enabled) {
+    logger.info('Runner', `Skipping ${key} (disabled)`);
+    return { key, status: 'skipped', count: 0, events: [] };
+  }
 
-  const allEvents = [];
-  const summary = {};
-
-  // Run scrapers sequentially to keep memory under control
-  for (const { key, Cls } of ALL_SCRAPERS) {
-    if (!config.scrapers[key]?.enabled) {
-      logger.info('Runner', `Skipping ${key} (disabled)`);
-      summary[key] = { status: 'skipped', count: 0 };
-      continue;
-    }
-
-    logger.info('Runner', `--- Running ${key} ---`);
+  logger.info('Runner', `--- ${key} START ---`);
+  try {
     const scraper = new Cls();
     const events = await scraper.run();
+    logger.info('Runner', `--- ${key} DONE (${events.length} events) ---`);
+    return { key, status: events.length > 0 ? 'ok' : 'empty', count: events.length, events };
+  } catch (err) {
+    logger.error('Runner', `${key} failed: ${err.message}`);
+    return { key, status: 'error', count: 0, events: [], error: err.message };
+  }
+}
 
-    summary[key] = { status: events.length > 0 ? 'ok' : 'empty', count: events.length };
-    allEvents.push(...events);
+async function main() {
+  const startTime = Date.now();
+  logger.info('Runner', `=== USA Scrape run started (concurrency=${CONCURRENCY}) ===`);
 
-    // Brief pause between scrapers
-    await sleep(1000);
+  const limit = pLimit(CONCURRENCY);
+  const summary = {};
+  const allEvents = [];
+
+  // Run scrapers in parallel (4 at a time). One source failing doesn't kill the rest.
+  const settled = await Promise.allSettled(
+    ALL_SCRAPERS.map(s => limit(() => runSource(s)))
+  );
+
+  for (const r of settled) {
+    if (r.status !== 'fulfilled') {
+      logger.error('Runner', `Unexpected rejection: ${r.reason}`);
+      continue;
+    }
+    const { key, status, count, events, error } = r.value;
+    summary[key] = { status, count, ...(error && { error }) };
+    if (events && events.length) allEvents.push(...events);
   }
 
   logger.info('Runner', `Total events collected: ${allEvents.length}`);
@@ -106,7 +125,8 @@ async function main() {
     return;
   }
 
-  // POST in batches
+  // POST in batches sequentially (the webhook batches its own writes,
+  // and parallel POSTs would just hammer Netlify without speeding anything up)
   const batchSize = config.batch.size;
   let posted = 0;
   let errors = 0;
@@ -120,8 +140,6 @@ async function main() {
       logger.error('Runner', `Batch POST failed: ${err.message}`);
       errors += batch.length;
     }
-
-    // Delay between batches to avoid rate limits
     if (i + batchSize < allEvents.length) {
       await sleep(config.batch.delayMs);
     }
@@ -135,7 +153,8 @@ function printSummary(summary, startTime) {
   const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
   logger.info('Runner', '=== Summary ===');
   for (const [key, val] of Object.entries(summary)) {
-    logger.info('Runner', `  ${key}: ${val.status} (${val.count} events)`);
+    const suffix = val.error ? ` — ${val.error}` : '';
+    logger.info('Runner', `  ${key}: ${val.status} (${val.count} events)${suffix}`);
   }
   logger.info('Runner', `Total time: ${elapsed}s`);
   logger.info('Runner', '=== USA Scrape run complete ===');
